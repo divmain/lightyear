@@ -2,15 +2,15 @@ from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
 from .types import RuleBlock
 
 
-rules = ""
+ly_grammar = ""
 funcmap = {}
 defer_children_eval = []
 
 
-class Rule(object):
+class Grammar(object):
     def __init__(self, ruletxt, defer=False):
-        global rules
-        rules += ruletxt + '\n'
+        global ly_grammar
+        ly_grammar += ruletxt + '\n'
 
         self.rulenames = []
         for line in ruletxt.split('\n'):
@@ -28,19 +28,19 @@ class Rule(object):
 
 ###
 
-@Rule(r'ltree = root_element*')
+@Grammar(r'ltree = root_element*')
 def ltree(env, node, children):
     return children
 
 
-@Rule(r'root_block / mixin_decl / var_decl / rule_block / (___ nl ___)')
+@Grammar(r'root_block / mixin_decl / var_decl / rule_block / (___ nl ___)')
 def root_element(env, node, children):
     return children[0]
 
 
 ### SELECTORS
 
-@Rule(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block')
+@Grammar(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block')
 def rule_block(env, node, children):
     tag, simple_sel, more_selectors, _, _, _, block = children
 
@@ -53,19 +53,19 @@ def rule_block(env, node, children):
                      block=block)
 
 
-@Rule(r'block = blk_open (declaration / rule_block / parent_selector / nl)+ blk_close')
+@Grammar(r'block = blk_open (declaration / rule_block / parent_selector / nl)+ blk_close')
 def block(env, node, children):
     return children[1]
 
 
-Rule(r'parent_selector = "&" rule_block')
+Grammar(r'parent_selector = "&" rule_block')
 
 
-@Rule(r'simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*')
+@Grammar(r'simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*')
 def simple_selector(env, node, children):
     return node.text
 
-Rule(r'''
+Grammar(r'''
 type_sel = name
 universal_sel = "*"
 
@@ -79,9 +79,9 @@ pseudo_class_not = "not(" ... ")"
 ''')
 
 
-### Rules with no associated function.  Returns empty list.
+### Grammar rules with no associated function.  Returns empty list.
 
-Rule(r'''
+Grammar(r'''
 tag = "(" name ")" _
 num = ~"\-?\d+(\.\d+)?"
 hex = ~"[0-9a-fA-F]+/"

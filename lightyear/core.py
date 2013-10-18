@@ -2,7 +2,7 @@ import re
 
 from parsimonious.grammar import Grammar
 
-from .lang import rules, funcmap, defer_children_eval
+from .lang import ly_grammar, funcmap, defer_children_eval
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
 
@@ -12,7 +12,7 @@ class LyLang(object):
 
     def __init__(self):
         if not self.grammar:
-            self.__class__.grammar = Grammar(rules)['ltree']
+            self.__class__.grammar = Grammar(ly_grammar)['ltree']
         self.env = {}
 
     def eval(self, ly_code):
