@@ -28,7 +28,7 @@ class Grammar(object):
             funcmap[name] = f
 
 
-###
+### GRAMMAR ###
 
 @Grammar(r'ltree = root_element*')
 def ltree(env, node, children):
@@ -40,7 +40,7 @@ def root_element(env, node, children):
     return children[0]
 
 
-### SELECTORS
+### SELECTORS ###
 
 @Grammar(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block')
 def rule_block(env, node, children):
@@ -81,7 +81,7 @@ pseudo_class_not = "not(" ... ")"
 ''')
 
 
-### CSS RULES
+### CSS RULES ###
 
 @Grammar(r'declaration = tag? property ":" _ expr+ ___ nl')
 def declaration(env, node, children):
@@ -101,7 +101,8 @@ def expr(env, node, children):
     return children[0]
 
 
-### MIXINS, FUNCTIONS, and VARIABLES
+### MIXINS, FUNCTIONS, and VARIABLES ###
+
 @Grammar(r'mixin_decl = name "(" (name _)* "):" ___ nl ___ block',
          defer=True)
 def mixin_decl(env, node):
@@ -146,7 +147,7 @@ def var_decl(env, node, children):
     env[name] = children
 
 
-### ROOT BLOCKS
+### ROOT BLOCKS ###
 
 @Grammar(r'root_block = "(root" ("." name)? ")" ___ any?')
 def root_block(env, node, children):
@@ -154,6 +155,13 @@ def root_block(env, node, children):
     tag_name = possible_name[1] if possible_name else None
     prefix = possible_prefix or None
     return RootBlock(tag_name=tag_name, prefix=prefix)
+
+
+### TEXT ###
+
+@Grammar('''string_val = ~'\"[^"\n]\"' ''')
+def string_val(env, node, children):
+    return node.text
 
 
 ### Grammar rules with no associated function.  Returns empty list.
