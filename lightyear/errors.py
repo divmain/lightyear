@@ -9,3 +9,7 @@ class IndentationError(LyError):
 class UnknownMixinOrFunc(LyError):
     def __init__(self, location):
         self.location = location
+
+
+class IncompatibleUnits(LyError):
+    pass
