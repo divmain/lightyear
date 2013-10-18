@@ -1,5 +1,6 @@
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
-from .types import RuleBlock, CSSRule
+from .types import RuleBlock, CSSRule, MixIn
+from .core import LyLang
 
 
 ly_grammar = ""
@@ -97,6 +98,28 @@ def property_(env, node, children):
 @Grammar(r'expr = mixin_or_func_call / lvalue / math / string_val _?')
 def expr(env, node, children):
     return children[0]
+
+
+### MIXINS, FUNCTIONS, and VARIABLES
+@Grammar(r'mixin_decl = name "(" (name _)* "):" ___ nl ___ block',
+         defer=True)
+def mixin_decl(env, node):
+    name, _, variables, _, _, _, _, block = node
+
+    ly_engine = LyLang(env=env)
+    name = ly_engine._evalnode(name)
+    variables = [varname for varname, _ in ly_engine._evalnode(variables)]
+
+    def f(args):
+        local_vars = list(zip(variables, args))
+        global_vars = env.items()
+        temp_env = dict(global_vars + local_vars)
+
+        ly_engine_local = LyLang(env=temp_env)
+        return ly_engine_local._evalnode(block)
+
+    return MixIn(name=name,
+                 func=f)
 
 
 ### Grammar rules with no associated function.  Returns empty list.

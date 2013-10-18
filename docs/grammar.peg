@@ -23,15 +23,14 @@ pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-c
 pseudo_class_not = "not(" ... ")"
 
 # RULES
-declaration = tag? property ":" _ expr ___ nl
+declaration = tag? property ":" _ expr+ ___ nl
 property = name
-expr = mixin_or_func_call / lvalue / math / string_val
+expr = mixin_or_func_call / lvalue / math / string_val _?
 
 # MIXINS, FUNCTIONS AND VARIABLES
 mixin_decl = name "(" (name _)* "):" ___ nl ___ block
 mixin_or_func_call = lvalue "(" (expr _)* ")"
 
-# VARIABLES
 var_decl = name _ "=" _ expr ___
 lvalue = name
 

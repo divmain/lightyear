@@ -10,10 +10,10 @@ from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
 class LyLang(object):
     grammar = None
 
-    def __init__(self):
+    def __init__(self, env=None):
         if not self.grammar:
             self.__class__.grammar = Grammar(ly_grammar)['ltree']
-        self.env = {}
+        self.env = env or {}
 
     def eval(self, ly_code):
         '''

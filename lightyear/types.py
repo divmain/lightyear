@@ -10,3 +10,12 @@ class CSSRule():
         self.tag = tag
         self.prop = prop
         self.values = values
+
+
+class MixIn():
+    def __init__(self, name, func):
+        self.name = name
+        self.func = func
+
+    def __call__(self, *args):
+        return self.func(*args)
