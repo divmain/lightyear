@@ -7,6 +7,8 @@ use_stment = "use" _ any+ nl
 rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block
 block = blk_open (declaration / rule_block / parent_selector / nl)+ blk_close
 
+parent_selector = "&" rule_block
+
 simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*
 
 type_sel = name
@@ -19,8 +21,6 @@ pseudo_class = ":" (pseudo_class_param "(" num ")") / pseudo_class_not / pseudo_
 pseudo_class_param = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-of-type" / "lang"
 pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after"
 pseudo_class_not = "not(" ... ")"
-
-parent_selector = "&" rule_block
 
 # RULES
 declaration = tag? property ":" _ expr ___ nl

@@ -53,6 +53,32 @@ def rule_block(env, node, children):
                      block=block)
 
 
+@Rule(r'block = blk_open (declaration / rule_block / parent_selector / nl)+ blk_close')
+def block(env, node, children):
+    return children[1]
+
+
+Rule(r'parent_selector = "&" rule_block')
+
+
+@Rule(r'simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*')
+def simple_selector(env, node, children):
+    return node.text
+
+Rule(r'''
+type_sel = name
+universal_sel = "*"
+
+attribute_sel = "[" name ("=" / "~=" / "|=") name "]"
+id_sel = "#" name
+
+pseudo_class = ":" (pseudo_class_param "(" num ")") / pseudo_class_not / pseudo_class_noparam
+pseudo_class_param = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-of-type" / "lang"
+pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after"
+pseudo_class_not = "not(" ... ")"
+''')
+
+
 ### Rules with no associated function.  Returns empty list.
 
 Rule(r'''
