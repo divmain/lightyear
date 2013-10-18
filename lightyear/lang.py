@@ -1,7 +1,8 @@
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
 from .types import RuleBlock, CSSRule, MixIn
 from .core import LyLang
-
+from .builtins import builtin_funcs
+from .errors import UnknownMixinOrFunc
 
 ly_grammar = ""
 funcmap = {}
@@ -118,8 +119,18 @@ def mixin_decl(env, node):
         ly_engine_local = LyLang(env=temp_env)
         return ly_engine_local._evalnode(block)
 
-    return MixIn(name=name,
-                 func=f)
+    env[name] = MixIn(name=name, func=f)
+
+
+@Grammar(r'mixin_or_func_call = lvalue "(" (expr _)* ")"')
+def mixin_or_func_call(env, node, children):
+    name, _, args, _ = children
+    args = [arg for arg, _ in args]
+
+    if name in builtin_funcs:
+        return builtin_funcs[name](*args)
+    elif name in env:
+        return env[name](*args)
 
 
 ### Grammar rules with no associated function.  Returns empty list.

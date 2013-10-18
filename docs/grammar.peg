@@ -31,7 +31,7 @@ expr = mixin_or_func_call / lvalue / math / string_val _?
 mixin_decl = name "(" (name _)* "):" ___ nl ___ block
 mixin_or_func_call = lvalue "(" (expr _)* ")"
 
-var_decl = name _ "=" _ expr ___
+var_decl = name _? "=" _? expr ___
 lvalue = name
 
 # ROOT BLOCKS
