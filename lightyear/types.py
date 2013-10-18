@@ -19,3 +19,9 @@ class MixIn():
 
     def __call__(self, *args):
         return self.func(*args)
+
+
+class RootBlock():
+    def __init__(self, tag_name, prefix):
+        self.tag_name = tag_name
+        self.prefix = prefix

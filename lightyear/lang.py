@@ -1,5 +1,5 @@
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
-from .types import RuleBlock, CSSRule, MixIn
+from .types import RuleBlock, CSSRule, MixIn, RootBlock
 from .core import LyLang
 from .builtins import builtin_funcs
 from .errors import UnknownMixinOrFunc
@@ -144,6 +144,16 @@ def lvalue(env, node, children):
 def var_decl(env, node, children):
     name, _, _, _, value = children
     env[name] = children
+
+
+### ROOT BLOCKS
+
+@Grammar(r'root_block = "(root" ("." name)? ")" ___ any?')
+def root_block(env, node, children):
+    _, possible_name, _, _, possible_prefix = children
+    tag_name = possible_name[1] if possible_name else None
+    prefix = possible_prefix or None
+    return RootBlock(tag_name=tag_name, prefix=prefix)
 
 
 ### Grammar rules with no associated function.  Returns empty list.
