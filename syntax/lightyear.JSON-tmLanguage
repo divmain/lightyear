@@ -1,0 +1,112 @@
+{ "name": "Lightyear",
+    "scopeName": "source.lightyear",
+    "fileTypes": ["ly"],
+    "patterns": [
+        {
+            "match": "(?:^[ \\t]+)?(\\/\\/).*$\\n?",
+            "name": "comment.line.lightyear"
+        },
+        {
+
+            "match": "(^[-a-zA-Z_][-\\w]*)?(?=\\()",
+            "name": "meta.function.lightyear"
+        },
+        {
+            "match": "\\.-?[_a-zA-Z]+[_a-zA-Z0-9-]*",
+            "name": "entity.other.attribute-name.class.lightyear"
+        },
+        {
+            "match": "^ *&amp;",
+            "name": "entity.language.lightyear"
+        },
+        {
+            "match": "(arguments)",
+            "name": "variable.language.lightyear"
+        },
+        {
+            "match": "\\$?\\b([\\$\\w\\-]+)(?=\\s*[:\\?]?=)",
+            "name": "variable.assignment.lightyear"
+        },
+        {
+            "match": "^\\s*(\\@[-\\w]+)",
+            "name": "keyword.at-rule.lightyear"
+        },
+        {
+            "match": "(\\@)(?=[-\\w])",
+            "name": "variable.punctuation.property.lightyear"
+        },
+        {
+            "match": "(:+)\\b(after|before|first-letter|first-line|selection)\\b",
+            "name": "entity.other.attribute-name.pseudo-element.lightyear"
+        },
+        {
+            "match": "(:)\\b(active|hover|focus|target|link|any-link|local-link|visited|scope|current|past|future|dir|lang|enabled|disabled|checked|indeterminate|default|valid|invalid|in-range|out-of-range|required|optional|read-only|read-write|root|first-child|last-child|only-child|nth-child|nth-last-child|first-of-type|last-of-type|nth-of-type|nth-last-of-type|only-of-type|nth-match|nth-last-match|empty|not|column|nth-column|nth-last-column)\\b",
+            "name": "entity.other.attribute-name.pseudo-class.lightyear"
+        },
+        {
+            "match": "\\b(a|abbr|acronym|address|area|article|aside|audio|b|base|big|blockquote|body|br|button|canvas|caption|cite|code|col|colgroup|datalist|dd|del|details|dfn|dialog|div|dl|dt|em|eventsource|fieldset|figure|figcaption|footer|form|frame|frameset|(h[1-6])|head|header|hgroup|hr|html|i|iframe|img|input|ins|kbd|label|legend|li|link|map|mark|menu|meta|meter|nav|noframes|noscript|object|ol|optgroup|option|output|p|param|pre|progress|q|samp|script|section|select|small|span|strike|strong|style|sub|summary|sup|table|tbody|td|textarea|tfoot|th|thead|time|title|tr|tt|ul|var|video)\\b",
+            "name": "entity.other.attribute-name.tag.lightyear"
+        },
+        {
+            "name": "constant.other.color",
+            "match": "(#)([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\\b",
+            "comment": "Hex values."
+        },
+        {
+            "match": "(#)[a-zA-Z][a-zA-Z0-9_-]*",
+            "name": "entity.other.attribute-name.id.lightyear"
+        },
+        {
+            "match": "(-webkit-|-moz\\-|-ms-|-o-)",
+            "name": "meta.vendor-prefix.lightyear"
+        },
+        {
+            "match": "\\b(true|false|defined|null)\\b",
+            "name": "constant.language.lightyear"
+        },
+        {
+            "match": "(\\b|\\s)(!important|for|in|return|if|else|unless|return)\\b",
+            "name": "keyword.control.lightyear"
+        },
+        {
+            "match": "((?:\\?|!|~|\\+|-|(?:\\*)?\\*|\\/|%|(?:\\.)\\.\\.|&lt;|&gt;|(?:=|:|\\?|\\+|-|\\*|\\/|%|&lt;|&gt;)?=|!=)|\\b(?:in|is(?:nt)?|not)\\b)",
+            "name": "keyword.operator.lightyear"
+        },
+        {
+            "begin": "\"",
+            "end": "\"",
+            "name": "string.quoted.double.lightyear"
+        },
+        {
+            "begin": "'",
+            "end": "'",
+            "name": "string.quoted.single.lightyear"
+        },
+        {
+            "match": "\\b(gutter-width|outercol|innercol)\\b(?=\\:|\\s\\s*)",
+            "name":"support.type.property-name.lightyear"
+        },
+        {
+            "match": "^\\s*[a-zA-Z-]+\\: ",
+            "name": "support.type.property-name.lightyear"
+        },
+        {
+
+            "match": "([0-9]+)((?:px|pt|ch|cm|mm|in|r?em|ex|pc|deg|g?rad|dpi|dpcm|s)\\b|%)?",
+            "name": "constant.numeric.lightyear",
+            "captures": {
+                "2": {"name": "keyword.other.unit.lightyear"}
+            }
+        },
+        {
+            "match": "[,:]",
+            "name": "meta.delimiter.lightyear"
+        },
+        {
+            "match": "\\([A-Za-z\\.]+\\)",
+            "name": "entity.name.tag.lightyear",
+            "comment": "Flags of form (flagname)"
+        }
+    ],
+    "uuid": "43fa6e40-8880-451c-b9f5-9f9f426225da"
+}

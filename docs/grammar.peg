@@ -1,0 +1,71 @@
+ltree = root_element*
+root_element = root_block / mixin_decl / var_decl / rule_block / use_stment / (___ nl ___)
+
+use_stment = "use" _ any+ nl
+
+# SELECTORS
+rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block
+block = "{blk_open}" (declaration / rule_block / parent_selector / nl)+ "{blk_close}"
+
+simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*
+
+type_sel = name
+universal_sel = "*"
+
+attribute_sel = "[" name ("=" / "~=" / "|=") name "]"
+id_sel = "#" name
+
+pseudo_class = ":" (pseudo_class_param "(" num ")") / pseudo_class_not / pseudo_class_noparam
+pseudo_class_param = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-of-type" / "lang"
+pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after"
+pseudo_class_not = "not(" ... ")"
+
+parent_selector = "&" rule_block
+
+# RULES
+declaration = tag? property ":" _ expr ___ nl
+property = name
+expr = mixin_or_func_call / lvalue / math / string_val
+
+# MIXINS, FUNCTIONS AND VARIABLES
+mixin_decl = name "(" (name _)* "):" ___ nl ___ block
+mixin_or_func_call = lvalue "(" (expr _)* ")"
+
+# VARIABLES
+var_decl = name _ "=" _ expr ___
+lvalue = name
+
+# ROOT BLOCKS
+root_block = "(root" ("." name)? ")" ___ any?
+
+# TEXT
+string_val = ~'\"[^"\n]\"' 
+
+# NUMERIC
+math = sum
+sum = prod (_ sum_op _ prod)*
+prod = equality (_ prod_op _ equality)*
+equality = value (_ equality_op _ value)*
+value = num_val / ("(" _ sum _ ")")
+
+sum_op_ = "+" / "-"
+prod_op = "*" / "/"
+equality_op = "=="
+
+num_val = distance / hexcolor / color_name / lvalue
+distance = (num unit) / "0"
+
+# BASIC
+tag = "(" name ")" _
+num = ~"\-?\d+(\.\d+)?"
+hex = ~"[0-9a-fA-F]+/"
+hexcolor = "#" hex
+name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"
+
+unit = "em" / "ex" / "px" / "cm" / "mm" / "in" / "pt" / "pc" / "deg" / "rad" / "grad" / "ms" / "s" / "hz" / "khz" / "%"
+color_name = "aliceblue" / "antiquewhite" / "aqua" / "aquamarine" / "azure" / "beige" / "bisque" / "black" / "blanchedalmond" / "blue" / "blueviolet" / "brown" / "burlywood" / "cadetblue" / "chartreuse" / "chocolate" / "coral" / "cornflowerblue" / "cornsilk" / "crimson" / "cyan" / "darkblue" / "darkcyan" / "darkgoldenrod" / "darkgray" / "darkgreen" / "darkkhaki" / "darkmagenta" / "darkolivegreen" / "darkorange" / "darkorchid" / "darkred" / "darksalmon" / "darkseagreen" / "darkslateblue" / "darkslategray" / "darkturquoise" / "darkviolet" / "deeppink" / "deepskyblue" / "dimgray" / "dodgerblue" / "firebrick" / "floralwhite" / "forestgreen" / "fuchsia" / "gainsboro" / "ghostwhite" / "gold" / "goldenrod" / "gray" / "green" / "greenyellow" / "honeydew" / "hotpink" / "indianred " / "indigo " / "ivory" / "khaki" / "lavender" / "lavenderblush" / "lawngreen" / "lemonchiffon" / "lightblue" / "lightcoral" / "lightcyan" / "lightgoldenrodyellow" / "lightgray" / "lightgreen" / "lightpink" / "lightsalmon" / "lightseagreen" / "lightskyblue" / "lightslategray" / "lightsteelblue" / "lightyellow" / "lime" / "limegreen" / "linen" / "magenta" / "maroon" / "mediumaquamarine" / "mediumblue" / "mediumorchid" / "mediumpurple" / "mediumseagreen" / "mediumslateblue" / "mediumspringgreen" / "mediumturquoise" / "mediumvioletred" / "midnightblue" / "mintcream" / "mistyrose" / "moccasin" / "navajowhite" / "navy" / "oldlace" / "olive" / "olivedrab" / "orange" / "orangered" / "orchid" / "palegoldenrod" / "palegreen" / "paleturquoise" / "palevioletred" / "papayawhip" / "peachpuff" / "peru" / "pink" / "plum" / "powderblue" / "purple" / "red" / "rosybrown" / "royalblue" / "saddlebrown" / "salmon" / "sandybrown" / "seagreen" / "seashell" / "sienna" / "silver" / "skyblue" / "slateblue" / "slategray" / "snow" / "springgreen" / "steelblue" / "tan" / "teal" / "thistle" / "tomato" / "turquoise" / "violet" / "wheat" / "white" / "whitesmoke" / "yellow" / "yellowgreen"
+nl = "\n"
+any = ~"."
+_ = ~"\s+"
+___ = ~"\s*" (comment ~"\s*")?
+comment = ~"{comment_delim}[^{comment_delim}]*{comment_delim}"
