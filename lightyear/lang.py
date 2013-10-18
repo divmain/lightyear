@@ -1,5 +1,5 @@
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
-from .types import RuleBlock
+from .types import RuleBlock, CSSRule
 
 
 ly_grammar = ""
@@ -77,6 +77,26 @@ pseudo_class_param = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-
 pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after"
 pseudo_class_not = "not(" ... ")"
 ''')
+
+
+### CSS RULES
+
+@Grammar(r'declaration = tag? property ":" _ expr+ ___ nl')
+def declaration(env, node, children):
+    tag, prop, _, _, values, _, _ = children
+    return CSSRule(tag=tag,
+                   prop=prop,
+                   values=values)
+
+
+@Grammar(r'property = name')
+def property_(env, node, children):
+    return node.text
+
+
+@Grammar(r'expr = mixin_or_func_call / lvalue / math / string_val _?')
+def expr(env, node, children):
+    return children[0]
 
 
 ### Grammar rules with no associated function.  Returns empty list.
