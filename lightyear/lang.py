@@ -55,10 +55,9 @@ universal_sel = "*"
 attribute_sel = "[" name ("=" / "~=" / "|=") name "]"
 id_sel = "#" name
 
-pseudo_class = ":" (pseudo_class_param "(" num ")") / pseudo_class_not / pseudo_class_noparam
+pseudo_class = ":" ((pseudo_class_param "(" num ")") / pseudo_class_noparam)
 pseudo_class_param = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-of-type" / "lang"
 pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after"
-pseudo_class_not = "not(" ... ")"
 ''')
 
 
@@ -77,7 +76,7 @@ def property_(env, node, children):
     return node.text
 
 
-@GDef(r'expr = mixin_or_func_call / lvalue / math / string_val _?')
+@GDef(r'expr = (mixin_or_func_call / lvalue / math / string_val) _?')
 def expr(env, node, children):
     return children[0]
 
@@ -140,7 +139,7 @@ def root_block(env, node, children):
 
 ### TEXT ###
 
-@GDef('''string_val = ~'\"[^"\n]\"' ''')
+@GDef(r'''string_val = ~'\"[^"\n]\"' ''')
 def string_val(env, node, children):
     return node.text
 
@@ -164,7 +163,7 @@ def math_operation(env, node, children):
 
 
 @GDef(r'''
-sum_op_ = "+" / "-"
+sum_op = "+" / "-"
 prod_op = "*" / "/"
 equality_op = "=="
 ''')
@@ -182,7 +181,7 @@ def math_paren(env, node, children):
     return children[2]
 
 
-@GDef('num_val = distance / num / hexcolor / color_name / lvalue')
+@GDef(r'num_val = distance / num / hexcolor / color_name / lvalue')
 def num_val(env, node, children):
     return children[0]
 

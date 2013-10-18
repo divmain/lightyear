@@ -38,8 +38,6 @@ class LyLang(object):
 
     def __init__(self, env=None):
         if not self.grammar:
-            print(len(ly_grammar))
-            print(ly_grammar)
             self.__class__.grammar = Grammar(ly_grammar)['ltree']
         self.env = env or {}
 
