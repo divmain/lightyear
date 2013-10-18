@@ -132,6 +132,19 @@ def mixin_or_func_call(env, node, children):
     elif name in env:
         return env[name](*args)
 
+    raise UnknownMixinOrFunc(location=node.start)
+
+
+@Grammar(r'lvalue = name')
+def lvalue(env, node, children):
+    return node.text.strip()
+
+
+@Grammar(r'var_decl = name _? "=" _? expr ___')
+def var_decl(env, node, children):
+    name, _, _, _, value = children
+    env[name] = children
+
 
 ### Grammar rules with no associated function.  Returns empty list.
 
