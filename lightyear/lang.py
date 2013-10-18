@@ -1,5 +1,9 @@
+import operator as op
+from decimal import Decimal, getcontext
+getcontext().prec = 4
+
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
-from .types import RuleBlock, CSSRule, MixIn, RootBlock
+from .types import RuleBlock, CSSRule, MixIn, RootBlock, Distance
 from .core import LyLang
 from .builtins import builtin_funcs
 from .errors import UnknownMixinOrFunc
@@ -164,11 +168,89 @@ def string_val(env, node, children):
     return node.text
 
 
+### NUMERIC ###
+
+@Grammar(r'math = sum')
+def math(env, node, children):
+    return children[0]
+
+
+@Grammar(r'''
+sum = prod (_? sum_op _? prod)*
+prod = equality (_ prod_op _ equality)*
+equality = value (_ equality_op _ value)*
+''')
+def math_operation(env, node, children):
+    operations = (
+        (operator, operand) for _, operator, _, operand in children[1])
+    return do_math(children[0], operations)
+
+
+@Grammar(r'''
+sum_op_ = "+" / "-"
+prod_op = "*" / "/"
+equality_op = "=="
+''')
+def operator_symbols(env, node, children):
+    return node.text
+
+
+@Grammar(r'value = num_val / paren')
+def math_value(env, node, children):
+    return children[0]
+
+
+@Grammar(r'paren = "(" _? sum _? ")"')
+def math_paren(env, node, children):
+    return children[2]
+
+
+@Grammar('num_val = distance / num / hexcolor / color_name / lvalue')
+def num_val(env, node, children):
+    return children[0]
+
+
+@Grammar(r'distance = num unit')
+def distance(env, node, children):
+    num, unit = children
+    return Distance(value=num, unit=unit)
+
+
+@Grammar(r'num = ~"\-?\d+(\.\d+)?"')
+def num(env, node, children):
+    return Decimal(node.text)
+
+
+### MATH HELPER FUNCTION ###
+
+OPERATORS = {'+': op.add,
+             '-': op.sub,
+             '*': op.mul,
+             '/': op.truediv,
+             '//': op.floordiv,
+             # '==': op.eq,
+             'isequal': op.eq,
+             '|': op.or_,
+             '&': op.and_,
+             '+=': op.iadd,
+             '-=': op.isub,
+             '*=': op.imul,
+             '/=': op.itruediv,
+             '**': op.pow,
+             }
+
+
+def do_math(start, operations):
+    output_val = start
+    for optr_symbol, operand in operations:
+        output_val = OPERATORS[optr_symbol](output_val, start)
+    return output_val
+
+
 ### Grammar rules with no associated function.  Returns empty list.
 
 Grammar(r'''
 tag = "(" name ")" _
-num = ~"\-?\d+(\.\d+)?"
 hex = ~"[0-9a-fA-F]+/"
 hexcolor = "#" hex
 name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"

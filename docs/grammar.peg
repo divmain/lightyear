@@ -41,22 +41,26 @@ root_block = "(root" ("." name)? ")" ___ any?
 string_val = ~'\"[^"\n]\"' 
 
 # NUMERIC
-math = sum 
-sum = prod (_ sum_op _ prod)*
+
+math = sum
+sum = prod (_? sum_op _? prod)*
 prod = equality (_ prod_op _ equality)*
 equality = value (_ equality_op _ value)*
-value = num_val / ("(" _? sum _? ")")
 
 sum_op_ = "+" / "-"
 prod_op = "*" / "/"
 equality_op = "=="
 
-num_val = distance / hexcolor / color_name / lvalue
-distance = (num unit) / "0"
+value = num_val / paren
+paren = "(" _? sum _? ")"
+
+num_val = distance / num / hexcolor / color_name / lvalue
+distance = num unit
+
+num = ~"\-?\d+(\.\d+)?"
 
 # BASIC
 tag = "(" name ")" _
-num = ~"\-?\d+(\.\d+)?"
 hex = ~"[0-9a-fA-F]+/"
 hexcolor = "#" hex
 name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"

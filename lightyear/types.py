@@ -25,3 +25,9 @@ class RootBlock():
     def __init__(self, tag_name, prefix):
         self.tag_name = tag_name
         self.prefix = prefix
+
+
+class Distance():
+    def __init__(self, value, unit):
+        self.value = value
+        self.unit = unit
