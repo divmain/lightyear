@@ -3,36 +3,12 @@ from decimal import Decimal, getcontext
 getcontext().prec = 4
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
-from .types import RuleBlock, CSSRule, MixIn, RootBlock, Distance
+from .types import RuleBlock, CSSRule, MixIn, RootBlock, Distance, ParentSelector
 from .core import LyLang
 from .builtins import builtin_funcs
 from .errors import UnknownMixinOrFunc
+from .grammar import Grammar
 
-ly_grammar = ""
-funcmap = {}
-defer_children_eval = []
-
-
-class Grammar(object):
-    def __init__(self, ruletxt, defer=False):
-        global ly_grammar
-        ly_grammar += ruletxt + '\n'
-
-        self.rulenames = []
-        for line in ruletxt.split('\n'):
-            line = line.strip()
-            if line:
-                name = line.split('=')[0].strip()
-                self.rulenames.append(name)
-                if defer:
-                    defer_children_eval.append(self.rulename)
-
-    def __call__(self, f):
-        for name in self.rulenames:
-            funcmap[name] = f
-
-
-### GRAMMAR ###
 
 @Grammar(r'ltree = root_element*')
 def ltree(env, node, children):
@@ -64,7 +40,9 @@ def block(env, node, children):
     return children[1]
 
 
-Grammar(r'parent_selector = "&" rule_block')
+@Grammar(r'parent_selector = "&" rule_block')
+def parent_selector(env, node, children):
+    return ParentSelector(children[1])
 
 
 @Grammar(r'simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*')

@@ -1,6 +1,7 @@
 from decimal import Decimal
 
-from .errors import IncompatibleUnits
+from lightyear.errors import IncompatibleUnits
+
 
 class RuleBlock():
     def __init__(self, tag, selectors, block):
@@ -8,12 +9,25 @@ class RuleBlock():
         self.selectors = selectors
         self.block = block
 
+    def css(self):
+        outside = ','.join(self.selectors)
+        inside = 'x-test:1;'
+        return outside + "{" + inside + "}"
+
 
 class CSSRule():
     def __init__(self, tag, prop, values):
         self.tag = tag
         self.prop = prop
         self.values = values
+
+    def css(self):
+        return self.prop + ":" + " ".join(self.values) + ";"
+
+
+class ParentSelector():
+    def __init__(self, block):
+        self.block = block
 
 
 class MixIn():

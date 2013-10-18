@@ -2,7 +2,7 @@ import re
 
 from parsimonious.grammar import Grammar
 
-from .lang import ly_grammar, funcmap, defer_children_eval
+from .grammar import ly_grammar, funcmap, defer_children_eval
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
 
