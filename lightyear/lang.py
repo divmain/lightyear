@@ -1,4 +1,5 @@
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
+from .types import RuleBlock
 
 
 rules = ""
@@ -26,6 +27,30 @@ class Rule(object):
 
 
 ###
+
+@Rule(r'ltree = root_element*')
+def ltree(env, node, children):
+    return children
+
+
+@Rule(r'root_block / mixin_decl / var_decl / rule_block / (___ nl ___)')
+def root_element(env, node, children):
+    return children[0]
+
+
+### SELECTORS
+
+@Rule(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block')
+def rule_block(env, node, children):
+    tag, simple_sel, more_selectors, _, _, _, block = children
+
+    selectors = [simple_sel]
+    if more_selectors:
+        selectors = selectors.extend([selector for _, selector in more_selectors])
+
+    return RuleBlock(tag=tag,
+                     selectors=selectors,
+                     block=block)
 
 
 ### Rules with no associated function.  Returns empty list.
