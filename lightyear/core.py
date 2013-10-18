@@ -2,16 +2,44 @@ import re
 
 from parsimonious.grammar import Grammar
 
-from .grammar import ly_grammar, funcmap, defer_children_eval
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
 
+ly_grammar = ""
+funcmap = {}
+defer_children_eval = []
+
+
+### GRAMMAR HANDLING ###
+
+class GDef(object):
+    def __init__(self, ruletxt, defer=False):
+        global ly_grammar
+        ly_grammar += ruletxt + '\n'
+
+        self.rulenames = []
+        for line in ruletxt.split('\n'):
+            line = line.strip()
+            if line:
+                name = line.split('=')[0].strip()
+                self.rulenames.append(name)
+                if defer:
+                    defer_children_eval.append(name)
+
+    def __call__(self, f):
+        for name in self.rulenames:
+            funcmap[name] = f
+
+
+### LIGHTYEAR PARSER ###
 
 class LyLang(object):
     grammar = None
 
     def __init__(self, env=None):
         if not self.grammar:
+            print(len(ly_grammar))
+            print(ly_grammar)
             self.__class__.grammar = Grammar(ly_grammar)['ltree']
         self.env = env or {}
 
@@ -32,6 +60,11 @@ class LyLang(object):
             return fn(self.env, node)
         return fn(self.env, node, [self._evalnode(child) for child in node])
 
+
+from . import lang
+
+
+### PRE-PEG TOKENIZATION ###
 
 def tokenize_whitespace(self, lines):
     """

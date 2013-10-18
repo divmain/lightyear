@@ -4,25 +4,24 @@ getcontext().prec = 4
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
 from .types import RuleBlock, CSSRule, MixIn, RootBlock, Distance, ParentSelector
-from .core import LyLang
+from .core import GDef
 from .builtins import builtin_funcs
 from .errors import UnknownMixinOrFunc
-from .grammar import Grammar
 
 
-@Grammar(r'ltree = root_element*')
+@GDef(r'ltree = root_element*')
 def ltree(env, node, children):
     return children
 
 
-@Grammar(r'root_block / mixin_decl / var_decl / rule_block / (___ nl ___)')
+@GDef(r'root_element = root_block / mixin_decl / var_decl / rule_block / (___ nl ___)')
 def root_element(env, node, children):
     return children[0]
 
 
 ### SELECTORS ###
 
-@Grammar(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block')
+@GDef(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block')
 def rule_block(env, node, children):
     tag, simple_sel, more_selectors, _, _, _, block = children
 
@@ -35,21 +34,21 @@ def rule_block(env, node, children):
                      block=block)
 
 
-@Grammar(r'block = blk_open (declaration / rule_block / parent_selector / nl)+ blk_close')
+@GDef(r'block = blk_open (declaration / rule_block / parent_selector / nl)+ blk_close')
 def block(env, node, children):
     return children[1]
 
 
-@Grammar(r'parent_selector = "&" rule_block')
+@GDef(r'parent_selector = "&" rule_block')
 def parent_selector(env, node, children):
     return ParentSelector(children[1])
 
 
-@Grammar(r'simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*')
+@GDef(r'simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*')
 def simple_selector(env, node, children):
     return node.text
 
-Grammar(r'''
+GDef(r'''
 type_sel = name
 universal_sel = "*"
 
@@ -65,7 +64,7 @@ pseudo_class_not = "not(" ... ")"
 
 ### CSS RULES ###
 
-@Grammar(r'declaration = tag? property ":" _ expr+ ___ nl')
+@GDef(r'declaration = tag? property ":" _ expr+ ___ nl')
 def declaration(env, node, children):
     tag, prop, _, _, values, _, _ = children
     return CSSRule(tag=tag,
@@ -73,19 +72,19 @@ def declaration(env, node, children):
                    values=values)
 
 
-@Grammar(r'property = name')
+@GDef(r'property = name')
 def property_(env, node, children):
     return node.text
 
 
-@Grammar(r'expr = mixin_or_func_call / lvalue / math / string_val _?')
+@GDef(r'expr = mixin_or_func_call / lvalue / math / string_val _?')
 def expr(env, node, children):
     return children[0]
 
 
 ### MIXINS, FUNCTIONS, and VARIABLES ###
 
-@Grammar(r'mixin_decl = name "(" (name _)* "):" ___ nl ___ block',
+@GDef(r'mixin_decl = name "(" (name _)* "):" ___ nl ___ block',
          defer=True)
 def mixin_decl(env, node):
     name, _, variables, _, _, _, _, block = node
@@ -105,7 +104,7 @@ def mixin_decl(env, node):
     env[name] = MixIn(name=name, func=f)
 
 
-@Grammar(r'mixin_or_func_call = lvalue "(" (expr _)* ")"')
+@GDef(r'mixin_or_func_call = lvalue "(" (expr _)* ")"')
 def mixin_or_func_call(env, node, children):
     name, _, args, _ = children
     args = [arg for arg, _ in args]
@@ -118,12 +117,12 @@ def mixin_or_func_call(env, node, children):
     raise UnknownMixinOrFunc(location=node.start)
 
 
-@Grammar(r'lvalue = name')
+@GDef(r'lvalue = name')
 def lvalue(env, node, children):
     return node.text.strip()
 
 
-@Grammar(r'var_decl = name _? "=" _? expr ___')
+@GDef(r'var_decl = name _? "=" _? expr ___')
 def var_decl(env, node, children):
     name, _, _, _, value = children
     env[name] = children
@@ -131,7 +130,7 @@ def var_decl(env, node, children):
 
 ### ROOT BLOCKS ###
 
-@Grammar(r'root_block = "(root" ("." name)? ")" ___ any?')
+@GDef(r'root_block = "(root" ("." name)? ")" ___ any?')
 def root_block(env, node, children):
     _, possible_name, _, _, possible_prefix = children
     tag_name = possible_name[1] if possible_name else None
@@ -141,19 +140,19 @@ def root_block(env, node, children):
 
 ### TEXT ###
 
-@Grammar('''string_val = ~'\"[^"\n]\"' ''')
+@GDef('''string_val = ~'\"[^"\n]\"' ''')
 def string_val(env, node, children):
     return node.text
 
 
 ### NUMERIC ###
 
-@Grammar(r'math = sum')
+@GDef(r'math = sum')
 def math(env, node, children):
     return children[0]
 
 
-@Grammar(r'''
+@GDef(r'''
 sum = prod (_? sum_op _? prod)*
 prod = equality (_ prod_op _ equality)*
 equality = value (_ equality_op _ value)*
@@ -164,7 +163,7 @@ def math_operation(env, node, children):
     return do_math(children[0], operations)
 
 
-@Grammar(r'''
+@GDef(r'''
 sum_op_ = "+" / "-"
 prod_op = "*" / "/"
 equality_op = "=="
@@ -173,28 +172,28 @@ def operator_symbols(env, node, children):
     return node.text
 
 
-@Grammar(r'value = num_val / paren')
+@GDef(r'value = num_val / paren')
 def math_value(env, node, children):
     return children[0]
 
 
-@Grammar(r'paren = "(" _? sum _? ")"')
+@GDef(r'paren = "(" _? sum _? ")"')
 def math_paren(env, node, children):
     return children[2]
 
 
-@Grammar('num_val = distance / num / hexcolor / color_name / lvalue')
+@GDef('num_val = distance / num / hexcolor / color_name / lvalue')
 def num_val(env, node, children):
     return children[0]
 
 
-@Grammar(r'distance = num unit')
+@GDef(r'distance = num unit')
 def distance(env, node, children):
     num, unit = children
     return Distance(value=num, unit=unit)
 
 
-@Grammar(r'num = ~"\-?\d+(\.\d+)?"')
+@GDef(r'num = ~"\-?\d+(\.\d+)?"')
 def num(env, node, children):
     return Decimal(node.text)
 
@@ -227,7 +226,7 @@ def do_math(start, operations):
 
 ### Grammar rules with no associated function.  Returns empty list.
 
-Grammar(r'''
+GDef(r'''
 tag = "(" name ")" _
 hex = ~"[0-9a-fA-F]+/"
 hexcolor = "#" hex
@@ -248,3 +247,6 @@ _ = ~"\s+"
     comment_delim=COMMENT_DELIM,
     blk_open=BLK_OPEN,
     blk_close=BLK_CLOSE))
+
+
+from .core import LyLang
