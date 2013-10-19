@@ -123,13 +123,15 @@ def mixin_or_func_call(env, node, children):
 
 @GDef(r'lvalue = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
 def lvalue(env, node, children):
+    if node.text in env:
+        return env[node.text]
     return node.text
 
 
 @GDef(r'var_decl = name _? "=" _? expr ___')
 def var_decl(env, node, children):
-    name, _, _, _, value = children
-    env[name] = children
+    name, _, _, _, value, _ = children
+    env[name] = value
 
 
 ### ROOT BLOCKS ###
@@ -249,9 +251,13 @@ def space_and_comments(env, node, children):
     return None
 
 
+@GDef(r'name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
+def name(env, node, children):
+    return node.text
+
+
 GDef(r'''
 tag = "(" name ")" _
-name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"
 
 nl = "\n"
 
