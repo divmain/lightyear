@@ -217,7 +217,7 @@ OPERATORS = {'+': op.add,
 def do_math(start, operations):
     output_val = start
     for optr_symbol, operand in operations:
-        output_val = OPERATORS[optr_symbol](output_val, start)
+        output_val = OPERATORS[optr_symbol](output_val, operand)
     return output_val
 
 
