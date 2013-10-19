@@ -91,7 +91,7 @@ class Distance():
             'Unit {} cannot be multiplied with unit {}.'.format(
                 self.unit, other.unit))
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if isinstance(other, Decimal):
             return Distance(self.value / other, self.unit)
         elif isinstance(other, Distance) and other.unit == self.unit:
