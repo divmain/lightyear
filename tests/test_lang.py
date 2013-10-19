@@ -32,7 +32,19 @@ def test_type_multiple_properties():
             display: block
             width: 32px
         ''')
-    o = 'div {color: #000000; display: block; width: 32px;}'
+    o = 'div{color:#000000;display:block;width:32px;}'
+    ly = LyLang()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_multiple_values():
+    i = dedent('''
+        div
+            color: #000000
+            border: 1px 2px 3px 4px
+        ''')
+    o = 'div{color:#000000;border:1px 2px 3px 4px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
