@@ -25,6 +25,18 @@ def test_type_sel():
     assert ly.css() == o
 
 
+def test_type_multiple_properties():
+    i = dedent('''
+        body
+            color: #000000
+            display: none
+        ''')
+    o = 'body {color: #000000; display: none;}'
+    ly = LyLang()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 def test_universal_sel():
     i = dedent('''
         *
