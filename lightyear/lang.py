@@ -162,9 +162,11 @@ prod = equality (_ prod_op _ equality)*
 equality = value (_ equality_op _ value)*
 ''')
 def math_operation(env, node, children):
-    operations = (
-        (operator, operand) for _, operator, _, operand in children[1])
-    return do_math(children[0], operations)
+    if len(children[1]):
+        operations = [
+            (operator, operand) for _, operator, _, operand in children[1]]
+        return do_math(children[0], operations)
+    return children[0]
 
 
 @GDef(r'''
