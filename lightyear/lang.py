@@ -203,16 +203,7 @@ OPERATORS = {'+': op.add,
              '-': op.sub,
              '*': op.mul,
              '/': op.truediv,
-             '//': op.floordiv,
-             # '==': op.eq,
-             'isequal': op.eq,
-             '|': op.or_,
-             '&': op.and_,
-             '+=': op.iadd,
-             '-=': op.isub,
-             '*=': op.imul,
-             '/=': op.itruediv,
-             '**': op.pow,
+             '==': op.eq
              }
 
 
