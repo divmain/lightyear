@@ -72,7 +72,6 @@ def declaration(env, node, children):
                    values=values)
 
 
-# @GDef(r'property = name')
 @GDef(r'property = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
 def property_(env, node, children):
     print('property', node.text)
@@ -119,9 +118,9 @@ def mixin_or_func_call(env, node, children):
     raise UnknownMixinOrFunc(location=node.start)
 
 
-@GDef(r'lvalue = name')
+@GDef(r'lvalue = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*')
 def lvalue(env, node, children):
-    return node.text.strip()
+    return node.text
 
 
 @GDef(r'var_decl = name _? "=" _? expr ___')
