@@ -44,7 +44,7 @@ def parent_selector(env, node, children):
     return ParentSelector(children[1])
 
 
-@GDef(r'simple_selector = (type_sel / universal_sel) (attribute_sel / id_sel / pseudo_class)*')
+@GDef(r'simple_selector = ((type_sel / universal_sel) (attribute_sel / id_class_sel / pseudo_class)*) / (attribute_sel / id_class_sel)')
 def simple_selector(env, node, children):
     return node.text
 
@@ -54,7 +54,7 @@ type_sel = name
 universal_sel = "*"
 
 attribute_sel = "[" name ("=" / "~=" / "|=") name "]"
-id_sel = "#" name
+id_class_sel = ("#" / ".") name
 
 pseudo_class = ":" ((pseudo_class_param "(" num ")") / pseudo_class_noparam)
 pseudo_class_param = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-of-type" / "lang"
