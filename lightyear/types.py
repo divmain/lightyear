@@ -13,8 +13,8 @@ class RuleBlock():
         if not len(self.block):
             return ''
         outside = ','.join(self.selectors)
-        inside = ''.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))  # ''
-                         for e in self.block)
+        inside = ' '.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))  # ''
+                          for e in self.block)
         return outside + " {" + inside + "}"
 
     def parent_selectors(self):
