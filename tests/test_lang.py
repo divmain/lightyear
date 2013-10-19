@@ -27,11 +27,12 @@ def test_type_sel():
 
 def test_type_multiple_properties():
     i = dedent('''
-        body
+        div
             color: #000000
-            display: none
+            display: block
+            width: 32px
         ''')
-    o = 'body {color: #000000; display: none;}'
+    o = 'div {color: #000000; display: block; width: 32px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
