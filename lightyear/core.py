@@ -60,7 +60,8 @@ class LyLang(object):
         return fn(self.env, node, [self._evalnode(child) for child in node])
 
     def css(self):
-        return ''.join(e.css() for e in self.ltree)
+        print('ltree ->', self.ltree)
+        return ''.join(e.css() if e else '' for e in self.ltree)
 
 
 # Import LightYear grammar after LyLang class definition.
