@@ -10,10 +10,18 @@ class RuleBlock():
         self.block = block
 
     def css(self):
+        if not len(self.block):
+            return ''
         outside = ','.join(self.selectors)
         inside = ''.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))  # ''
                          for e in self.block)
         return outside + " {" + inside + "}"
+
+    def parent_selectors(self):
+        for i, element in reversed(list(enumerate(self.block))):
+            if isinstance(element, ParentSelector):
+                yield element
+                del self.block[i]
 
 
 class CSSRule():
@@ -29,8 +37,8 @@ class CSSRule():
 
 
 class ParentSelector():
-    def __init__(self, block):
-        self.block = block
+    def __init__(self, rule_block):
+        self.rule_block = rule_block
 
 
 class MixIn():

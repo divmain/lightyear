@@ -4,6 +4,7 @@ from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
+from .types import RuleBlock
 
 ly_grammar = ""
 funcmap = {}
@@ -49,6 +50,7 @@ class LyLang(object):
         ly_code = '\n'.join(tokenize_whitespace(ly_code))
         node = self.grammar.parse(ly_code)
         self.ltree = self._evalnode(node)
+        self.resolve_parent_sels()
 
     def _evalnode(self, node):
         '''
@@ -62,6 +64,28 @@ class LyLang(object):
     def css(self):
         print('ltree ->', self.ltree)
         return ''.join(e.css() if e else '' for e in self.ltree)
+
+    def resolve_parent_sels(self):
+        for i, element in enumerate(self.ltree):
+            if isinstance(element, RuleBlock):
+                for parent_selector in element.parent_selectors():
+                    ps_rule_block = parent_selector.rule_block
+                    if len(ps_rule_block.selectors) > 1:
+                        new_selectors = (
+                            element.selectors[:-1] +
+                            [element.selectors[-1] + ps_rule_block.selectors[0]] +
+                            ps_rule_block.selectors[1:]
+                            )
+                    else:
+                        new_selectors = (
+                            element.selectors[:-1] +
+                            [element.selectors[-1] + ps_rule_block.selectors[0]]
+                            )
+                    new_block = RuleBlock(
+                        tag=ps_rule_block.tag,
+                        selectors=new_selectors,
+                        block=ps_rule_block.block)
+                    self.ltree.insert(i+1, new_block)
 
 
 # Import LightYear grammar after LyLang class definition.
