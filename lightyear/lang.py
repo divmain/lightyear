@@ -1,6 +1,6 @@
 import operator as op
 from decimal import Decimal, getcontext
-getcontext().prec = 4
+getcontext().prec = 6
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
 from .types import RuleBlock, CSSRule, MixIn, RootBlock, Distance, ParentSelector

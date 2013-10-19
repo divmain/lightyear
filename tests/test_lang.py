@@ -189,7 +189,7 @@ def test_division_float_b():
         #last
             height: 10px / 3
         ''')
-    o = '#last {height: 3.3333px;}'
+    o = '#last {height: 3.33333px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
