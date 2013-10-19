@@ -34,9 +34,14 @@ def rule_block(env, node, children):
                      block=block)
 
 
-@GDef(r'block = blk_open ___ (declaration / rule_block / parent_selector / ___)+ ___ blk_close')
+@GDef(r'block = blk_open ___ block_element+ blk_close')
 def block(env, node, children):
-    return children[2][0]
+    return children[2]
+
+
+@GDef(r'block_element = (declaration / rule_block / parent_selector) ___')
+def block_element(env, node, children):
+    return children[0][0]
 
 
 @GDef(r'parent_selector = "&" rule_block')
@@ -66,9 +71,9 @@ def selector_misc(env, node, children):
 
 ### CSS RULES ###
 
-@GDef(r'declaration = tag? property ":" _ expr+ ___')
+@GDef(r'declaration = tag? property ":" _ expr+')
 def declaration(env, node, children):
-    tag, prop, _, _, values, _ = children
+    tag, prop, _, _, values = children
     print('declaration children:', children)
     return CSSRule(tag=tag,
                    prop=prop,
@@ -88,7 +93,7 @@ def expr(env, node, children):
 
 ### MIXINS, FUNCTIONS, and VARIABLES ###
 
-@GDef(r'mixin_decl = name "(" (name _)* "):" ___ nl ___ block',
+@GDef(r'mixin_decl = name "(" (name _)* "):" ___ block',
       defer=True)
 def mixin_decl(env, node):
     name, _, variables, _, _, _, _, block = node
@@ -246,7 +251,7 @@ def unit(env, node, children):
     return node.text
 
 
-@GDef(r'___ = ~"[\n\s]*" (comment ~"[\n\s]*")*')
+@GDef(r'___ = ~"[\s]*" (comment ~"[\s]*")*')
 def space_and_comments(env, node, children):
     return None
 
@@ -259,10 +264,8 @@ def name(env, node, children):
 GDef(r'''
 tag = "(" name ")" _
 
-nl = "\n"
-
 any = ~"."
-_ = ~"\s+"
+_ = ~"[ \t]+"
 
 blk_open = "{blk_open}"
 blk_close = "{blk_close}"
