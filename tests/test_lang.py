@@ -143,7 +143,7 @@ def test_addition():
 def test_subtraction():
     i = dedent('''
         .button
-            left: 0 - 4px
+            left: 0px - 4px
         ''')
     o = '.button {left: -4px;}'
     ly = LyLang()
