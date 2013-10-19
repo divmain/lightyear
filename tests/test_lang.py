@@ -91,24 +91,37 @@ def test_pseudo_class_noparam():
     assert ly.css() == o
 
 
-def test_pseudo_class_not():
-    i = dedent('''
-        p:not(#example)
-            background-color: yellow
-        ''')
-    o = 'p:not(#example) {background-color: yellow;}'
-    ly = LyLang()
-    ly.eval(i)
-    assert ly.css() == o
+# def test_pseudo_class_not():
+#     i = dedent('''
+#         p:not(#example)
+#             background-color: yellow
+#         ''')
+#     o = 'p:not(#example) {background-color: yellow;}'
+#     ly = LyLang()
+#     ly.eval(i)
+#     assert ly.css() == o
 
 
-def test_parent_selector():
+def test_parent_selector_a():
     i = dedent('''
         p
             &#first
                 background-color: yellow
         ''')
     o = 'p#first {background-color: yellow;}'
+    ly = LyLang()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_parent_selector_b():
+    i = dedent('''
+        p
+            a
+                &#first
+                    background-color: yellow
+        ''')
+    o = 'p a#first {background-color: yellow;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
