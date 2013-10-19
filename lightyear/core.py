@@ -46,6 +46,7 @@ class LyLang(object):
         Takes as input a string containing LightYear code, and recursively
         evaluates the root node.
         '''
+        ly_code = '\n'.join(tokenize_whitespace(ly_code))
         node = self.grammar.parse(ly_code)
         return self._evalnode(node)
 
@@ -59,12 +60,13 @@ class LyLang(object):
         return fn(self.env, node, [self._evalnode(child) for child in node])
 
 
+# Import LightYear grammar after LyLang class definition.
 from . import lang
 
 
 ### PRE-PEG TOKENIZATION ###
 
-def tokenize_whitespace(self, lines):
+def tokenize_whitespace(text):
     """
     For each line, indentify current level of indendation and compare
     against indentation of previous line.  Insert BLK_OPEN or BLK_CLOSE
@@ -73,6 +75,8 @@ def tokenize_whitespace(self, lines):
 
     firstline = True
     prevdent = 0
+
+    lines = text.split('\n')
 
     for line in lines:
         line = line.expandtabs(INDENT_SIZE)
@@ -99,7 +103,7 @@ def tokenize_whitespace(self, lines):
         elif curdent < prevdent:
             yield BLK_CLOSE * (prevdent - curdent) + line
         else:
-            raise self.IndentationError(line)
+            raise IndentationError(line)
 
         prevdent = curdent
 
@@ -107,7 +111,7 @@ def tokenize_whitespace(self, lines):
     yield BLK_CLOSE * prevdent
 
 
-def tokenize_comments(self, lines):
+def tokenize_comments(lines):
     '''
     Identify and tokenize comments.
     '''
@@ -119,7 +123,7 @@ def tokenize_comments(self, lines):
         yield line
 
 
-def _isquoted(self, line, pos):
+def _isquoted(line, pos):
     '''
     Return boolean value indicating whether the character at position
     pos resides within a quote.
