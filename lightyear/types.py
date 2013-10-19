@@ -48,6 +48,10 @@ class MixIn():
         return self.func(*args)
 
 
+class UnpackMe(list):
+    pass
+
+
 class RootBlock():
     def __init__(self, tag_name, prefix):
         self.tag_name = tag_name

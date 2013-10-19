@@ -4,7 +4,7 @@ from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
-from .types import RuleBlock
+from .types import RuleBlock, UnpackMe
 
 ly_grammar = ""
 funcmap = {}
@@ -59,7 +59,18 @@ class LyLang(object):
         fn = funcmap.get(node.expr_name, lambda env, node, children: children)
         if node.expr_name in defer_children_eval:
             return fn(self.env, node)
-        return fn(self.env, node, [self._evalnode(child) for child in node])
+        children = [self._evalnode(child) for child in node]
+
+        # Mixins return lists that need to be unpacked.
+        for i, child in enumerate(children):
+            if isinstance(child, UnpackMe):
+                offset = 1
+                for packed_child in child:
+                    children.insert(i+offset, packed_child)
+                    offset += 1
+                del children[i]
+
+        return fn(self.env, node, children)
 
     def css(self):
         print('ltree ->', self.ltree)
