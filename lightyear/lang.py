@@ -129,7 +129,7 @@ def var_decl(env, node, children):
 
 ### ROOT BLOCKS ###
 
-@GDef(r'root_block = "(root" ("." name)? ")" ___ any?')
+@GDef(r'root_block = "(root" ("." name)? ")" ___ any*')
 def root_block(env, node, children):
     _, possible_name, _, _, possible_prefix = children
     tag_name = possible_name[1] if possible_name else None
