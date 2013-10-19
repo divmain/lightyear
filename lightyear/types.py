@@ -12,10 +12,10 @@ class RuleBlock():
     def css(self):
         if not len(self.block):
             return ''
-        outside = ','.join(self.selectors)
-        inside = ' '.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))  # ''
-                          for e in self.block)
-        return outside + " {" + inside + "}"
+        outside = ' '.join(self.selectors)
+        inside = ''.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))  # ''
+                         for e in self.block)
+        return outside + "{" + inside + "}"
 
     def parent_selectors(self):
         for i, element in reversed(list(enumerate(self.block))):
@@ -31,9 +31,7 @@ class CSSRule():
         self.values = values
 
     def css(self):
-        print('prop', self.prop)
-        print('values', self.values)
-        return self.prop + ": " + " ".join(str(x) for x in self.values) + ";"
+        return self.prop + ":" + " ".join(str(x) for x in self.values) + ";"
 
 
 class ParentSelector():
