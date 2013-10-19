@@ -52,7 +52,7 @@ def test_id_sel():
         #first
             display: block
         ''')
-    o = 'div#first {display: block;}'
+    o = '#first {display: block;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
