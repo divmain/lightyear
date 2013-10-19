@@ -39,7 +39,7 @@ def block(env, node, children):
     return children[2]
 
 
-@GDef(r'block_element = (declaration / rule_block / parent_selector) ___')
+@GDef(r'block_element = (mixin_or_func_call / declaration / rule_block / parent_selector) ___')
 def block_element(env, node, children):
     return children[0][0]
 
@@ -96,15 +96,15 @@ def expr(env, node, children):
 @GDef(r'mixin_decl = name "(" (name _)* "):" ___ block',
       defer=True)
 def mixin_decl(env, node):
-    name, _, variables, _, _, _, _, block = node
+    name, _, variables, _, _, block = node
 
     ly_engine = LyLang(env=env)
     name = ly_engine._evalnode(name)
     variables = [varname for varname, _ in ly_engine._evalnode(variables)]
 
-    def f(args):
+    def f(*args):
+        global_vars = list(env.items())
         local_vars = list(zip(variables, args))
-        global_vars = env.items()
         temp_env = dict(global_vars + local_vars)
 
         ly_engine_local = LyLang(env=temp_env)
@@ -113,7 +113,7 @@ def mixin_decl(env, node):
     env[name] = MixIn(name=name, func=f)
 
 
-@GDef(r'mixin_or_func_call = lvalue "(" (expr _)* ")"')
+@GDef(r'mixin_or_func_call = name "(" (_ expr)* ")"')
 def mixin_or_func_call(env, node, children):
     name, _, args, _ = children
     args = [arg for arg, _ in args]
