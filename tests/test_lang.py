@@ -134,7 +134,7 @@ def test_addition():
         li
             width: 8px + 2
         ''')
-    o = 'li {width: 16px;}'
+    o = 'li {width: 10px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
