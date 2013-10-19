@@ -14,16 +14,16 @@ def ltree(env, node, children):
     return children
 
 
-@GDef(r'root_element = root_block / mixin_decl / var_decl / rule_block / (___ nl ___)')
+@GDef(r'root_element = root_block / mixin_decl / var_decl / rule_block / ___')
 def root_element(env, node, children):
     return children[0]
 
 
 ### SELECTORS ###
 
-@GDef(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ nl ___ block')
+@GDef(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ block')
 def rule_block(env, node, children):
-    tag, simple_sel, more_selectors, _, _, _, block = children
+    tag, simple_sel, more_selectors, _, block = children
 
     selectors = [simple_sel]
     if more_selectors:
@@ -34,9 +34,9 @@ def rule_block(env, node, children):
                      block=block)
 
 
-@GDef(r'block = blk_open (declaration / rule_block / parent_selector / nl)+ blk_close')
+@GDef(r'block = blk_open ___ (declaration / rule_block / parent_selector / nl)+ ___ blk_close')
 def block(env, node, children):
-    return children[1]
+    return children[2]
 
 
 @GDef(r'parent_selector = "&" rule_block')
@@ -63,9 +63,9 @@ pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-c
 
 ### CSS RULES ###
 
-@GDef(r'declaration = tag? property ":" _ expr+ ___ nl')
+@GDef(r'declaration = tag? property ":" _ expr+ ___')
 def declaration(env, node, children):
-    tag, prop, _, _, values, _, _ = children
+    tag, prop, _, _, values, _ = children
     return CSSRule(tag=tag,
                    prop=prop,
                    values=values)
@@ -235,13 +235,13 @@ unit = "em" / "ex" / "px" / "cm" / "mm" / "in" / "pt" / "pc" / "deg" / "rad" / "
 color_name = "aliceblue" / "antiquewhite" / "aqua" / "aquamarine" / "azure" / "beige" / "bisque" / "black" / "blanchedalmond" / "blue" / "blueviolet" / "brown" / "burlywood" / "cadetblue" / "chartreuse" / "chocolate" / "coral" / "cornflowerblue" / "cornsilk" / "crimson" / "cyan" / "darkblue" / "darkcyan" / "darkgoldenrod" / "darkgray" / "darkgreen" / "darkkhaki" / "darkmagenta" / "darkolivegreen" / "darkorange" / "darkorchid" / "darkred" / "darksalmon" / "darkseagreen" / "darkslateblue" / "darkslategray" / "darkturquoise" / "darkviolet" / "deeppink" / "deepskyblue" / "dimgray" / "dodgerblue" / "firebrick" / "floralwhite" / "forestgreen" / "fuchsia" / "gainsboro" / "ghostwhite" / "gold" / "goldenrod" / "gray" / "green" / "greenyellow" / "honeydew" / "hotpink" / "indianred " / "indigo " / "ivory" / "khaki" / "lavender" / "lavenderblush" / "lawngreen" / "lemonchiffon" / "lightblue" / "lightcoral" / "lightcyan" / "lightgoldenrodyellow" / "lightgray" / "lightgreen" / "lightpink" / "lightsalmon" / "lightseagreen" / "lightskyblue" / "lightslategray" / "lightsteelblue" / "lightyellow" / "lime" / "limegreen" / "linen" / "magenta" / "maroon" / "mediumaquamarine" / "mediumblue" / "mediumorchid" / "mediumpurple" / "mediumseagreen" / "mediumslateblue" / "mediumspringgreen" / "mediumturquoise" / "mediumvioletred" / "midnightblue" / "mintcream" / "mistyrose" / "moccasin" / "navajowhite" / "navy" / "oldlace" / "olive" / "olivedrab" / "orange" / "orangered" / "orchid" / "palegoldenrod" / "palegreen" / "paleturquoise" / "palevioletred" / "papayawhip" / "peachpuff" / "peru" / "pink" / "plum" / "powderblue" / "purple" / "red" / "rosybrown" / "royalblue" / "saddlebrown" / "salmon" / "sandybrown" / "seagreen" / "seashell" / "sienna" / "silver" / "skyblue" / "slateblue" / "slategray" / "snow" / "springgreen" / "steelblue" / "tan" / "teal" / "thistle" / "tomato" / "turquoise" / "violet" / "wheat" / "white" / "whitesmoke" / "yellow" / "yellowgreen"
 nl = "\n"
 
+any = ~"."
+___ = ~"[\n\s]*" (comment ~"[\n\s]*")*
+_ = ~"\s+"
+
 blk_open = "{blk_open}"
 blk_close = "{blk_close}"
 comment = ~"{comment_delim}[^{comment_delim}]*{comment_delim}"
-
-any = ~"."
-___ = ~"\s*" (comment ~"\s*")?
-_ = ~"\s+"
 '''.format(
     comment_delim=COMMENT_DELIM,
     blk_open=BLK_OPEN,
