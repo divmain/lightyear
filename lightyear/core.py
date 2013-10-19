@@ -48,7 +48,7 @@ class LyLang(object):
         '''
         ly_code = '\n'.join(tokenize_whitespace(ly_code))
         node = self.grammar.parse(ly_code)
-        return self._evalnode(node)
+        self.ltree = self._evalnode(node)
 
     def _evalnode(self, node):
         '''
@@ -58,6 +58,9 @@ class LyLang(object):
         if node.expr_name in defer_children_eval:
             return fn(self.env, node)
         return fn(self.env, node, [self._evalnode(child) for child in node])
+
+    def css(self):
+        return ''.join(e.css() for e in self.ltree)
 
 
 # Import LightYear grammar after LyLang class definition.

@@ -34,9 +34,9 @@ def rule_block(env, node, children):
                      block=block)
 
 
-@GDef(r'block = blk_open ___ (declaration / rule_block / parent_selector / nl)+ ___ blk_close')
+@GDef(r'block = blk_open ___ (declaration / rule_block / parent_selector / ___)+ ___ blk_close')
 def block(env, node, children):
-    return children[2]
+    return children[2][0]
 
 
 @GDef(r'parent_selector = "&" rule_block')
@@ -66,19 +66,22 @@ pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-c
 @GDef(r'declaration = tag? property ":" _ expr+ ___')
 def declaration(env, node, children):
     tag, prop, _, _, values, _ = children
+    print('declaration children:', children)
     return CSSRule(tag=tag,
                    prop=prop,
                    values=values)
 
 
-@GDef(r'property = name')
+# @GDef(r'property = name')
+@GDef(r'property = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
 def property_(env, node, children):
+    print('property', node.text)
     return node.text
 
 
 @GDef(r'expr = (mixin_or_func_call / lvalue / math / string_val) _?')
 def expr(env, node, children):
-    return children[0]
+    return children[0][0]
 
 
 ### MIXINS, FUNCTIONS, and VARIABLES ###
@@ -216,13 +219,17 @@ def do_math(start, operations):
 
 ### Grammar rules with no associated function.  Returns empty list.
 
+@GDef(r'unit = "em" / "ex" / "px" / "cm" / "mm" / "in" / "pt" / "pc" / "deg" / "rad" / "grad" / "ms" / "s" / "hz" / "khz" / "%"')
+def unit(env, node, children):
+    return node.text
+
+
 GDef(r'''
 tag = "(" name ")" _
 hex = ~"[0-9a-fA-F]+/"
 hexcolor = "#" hex
 name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"
 
-unit = "em" / "ex" / "px" / "cm" / "mm" / "in" / "pt" / "pc" / "deg" / "rad" / "grad" / "ms" / "s" / "hz" / "khz" / "%"
 color_name = "aliceblue" / "antiquewhite" / "aqua" / "aquamarine" / "azure" / "beige" / "bisque" / "black" / "blanchedalmond" / "blue" / "blueviolet" / "brown" / "burlywood" / "cadetblue" / "chartreuse" / "chocolate" / "coral" / "cornflowerblue" / "cornsilk" / "crimson" / "cyan" / "darkblue" / "darkcyan" / "darkgoldenrod" / "darkgray" / "darkgreen" / "darkkhaki" / "darkmagenta" / "darkolivegreen" / "darkorange" / "darkorchid" / "darkred" / "darksalmon" / "darkseagreen" / "darkslateblue" / "darkslategray" / "darkturquoise" / "darkviolet" / "deeppink" / "deepskyblue" / "dimgray" / "dodgerblue" / "firebrick" / "floralwhite" / "forestgreen" / "fuchsia" / "gainsboro" / "ghostwhite" / "gold" / "goldenrod" / "gray" / "green" / "greenyellow" / "honeydew" / "hotpink" / "indianred " / "indigo " / "ivory" / "khaki" / "lavender" / "lavenderblush" / "lawngreen" / "lemonchiffon" / "lightblue" / "lightcoral" / "lightcyan" / "lightgoldenrodyellow" / "lightgray" / "lightgreen" / "lightpink" / "lightsalmon" / "lightseagreen" / "lightskyblue" / "lightslategray" / "lightsteelblue" / "lightyellow" / "lime" / "limegreen" / "linen" / "magenta" / "maroon" / "mediumaquamarine" / "mediumblue" / "mediumorchid" / "mediumpurple" / "mediumseagreen" / "mediumslateblue" / "mediumspringgreen" / "mediumturquoise" / "mediumvioletred" / "midnightblue" / "mintcream" / "mistyrose" / "moccasin" / "navajowhite" / "navy" / "oldlace" / "olive" / "olivedrab" / "orange" / "orangered" / "orchid" / "palegoldenrod" / "palegreen" / "paleturquoise" / "palevioletred" / "papayawhip" / "peachpuff" / "peru" / "pink" / "plum" / "powderblue" / "purple" / "red" / "rosybrown" / "royalblue" / "saddlebrown" / "salmon" / "sandybrown" / "seagreen" / "seashell" / "sienna" / "silver" / "skyblue" / "slateblue" / "slategray" / "snow" / "springgreen" / "steelblue" / "tan" / "teal" / "thistle" / "tomato" / "turquoise" / "violet" / "wheat" / "white" / "whitesmoke" / "yellow" / "yellowgreen"
 nl = "\n"
 

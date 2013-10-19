@@ -6,6 +6,14 @@ from lightyear import LyLang
 
 # SELECTORS
 
+def test_simplest():
+    i = 'body\n    width: 32px'
+    o = 'body {width: 32px;}'
+    ly = LyLang()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 def test_type_sel():
     i = dedent('''
         body

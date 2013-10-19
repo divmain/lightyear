@@ -11,8 +11,9 @@ class RuleBlock():
 
     def css(self):
         outside = ','.join(self.selectors)
-        inside = 'x-test:1;'
-        return outside + "{" + inside + "}"
+        inside = ''.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))  # ''
+                         for e in self.block)
+        return outside + " {" + inside + "}"
 
 
 class CSSRule():
@@ -22,7 +23,9 @@ class CSSRule():
         self.values = values
 
     def css(self):
-        return self.prop + ":" + " ".join(self.values) + ";"
+        print('prop', self.prop)
+        print('values', self.values)
+        return self.prop + ": " + " ".join(str(x) for x in self.values) + ";"
 
 
 class ParentSelector():
@@ -49,6 +52,9 @@ class Distance():
     def __init__(self, value, unit):
         self.value = value
         self.unit = unit
+
+    def __str__(self):
+        return str(self.value) + self.unit
 
     def __add__(self, other):
         if isinstance(other, Decimal):
