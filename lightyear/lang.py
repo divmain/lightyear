@@ -84,7 +84,7 @@ def expr(env, node, children):
 ### MIXINS, FUNCTIONS, and VARIABLES ###
 
 @GDef(r'mixin_decl = name "(" (name _)* "):" ___ nl ___ block',
-         defer=True)
+      defer=True)
 def mixin_decl(env, node):
     name, _, variables, _, _, _, _, block = node
 
