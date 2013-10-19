@@ -9,14 +9,14 @@ from .builtins import builtin_funcs
 from .errors import UnknownMixinOrFunc
 
 
-@GDef(r'ltree = root_element*')
+@GDef(r'ltree = root_element+')
 def ltree(env, node, children):
     return children
 
 
-@GDef(r'root_element = root_block / mixin_decl / var_decl / rule_block / ___')
+@GDef(r'root_element = ___ (root_block / mixin_decl / var_decl / rule_block) ___')
 def root_element(env, node, children):
-    return children[0]
+    return children[1][0]
 
 
 ### SELECTORS ###
