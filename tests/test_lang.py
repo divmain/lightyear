@@ -247,15 +247,30 @@ def test_variable():
     assert ly.css() == o
 
 
+def test_mixin_decl_without_call():
+    i = dedent('''
+        mixin():
+            width: 10px
+            height: 20px
+        .example
+            width: 5px
+        ''')
+    o = '.example{width:5px;}'
+    ly = LyLang()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 def test_mixin_a():
     i = dedent('''
         mixin():
             width: 10px
             height: 20px
         .example
+            color: white
             mixin()
         ''')
-    o = '.example{width:10px;height:20px}'
+    o = '.example{color:white;width:10px;height:20px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
@@ -269,7 +284,7 @@ def test_mixin_b():
         .example
             mixin(5px 10px)
         ''')
-    o = '.example{width:5px;height:10px}'
+    o = '.example{width:5px;height:10px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
@@ -283,7 +298,7 @@ def test_mixin_c():
         .example
             mixin(5px 10px)
         ''')
-    o = '.example{width:10px;height:15px}'
+    o = '.example{width:10px;height:15px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
