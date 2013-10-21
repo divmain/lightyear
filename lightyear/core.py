@@ -4,7 +4,7 @@ from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
-from .types import RuleBlock, UnpackMe
+from .types import RuleBlock, UnpackMe, RootBlock
 
 ly_grammar = ""
 funcmap = {}
@@ -70,7 +70,21 @@ class LyLang(object):
         return fn(self.env, node, children)
 
     def css(self):
-        return ''.join(e.css() if hasattr(e, 'css') else '' for e in self.ltree)
+        root_blocks = []
+        for e in self.ltree:
+            if isinstance(e, RootBlock):
+                root_blocks.append(e)
+        if not root_blocks:
+            root_blocks.append(RootBlock(tag_name=None, prefix=''))
+
+        output = ''
+        for root_block in root_blocks:
+            print('root_block')
+            if root_block.tag_name: print(root_block.tag_name)
+            output += root_block.prefix
+            output += ''.join(e.css(tag=root_block.tag_name) if hasattr(e, 'css') else '' for e in self.ltree)
+
+        return output
 
     def resolve_parent_sels(self):
         for i, element in enumerate(self.ltree):

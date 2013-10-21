@@ -9,12 +9,17 @@ class RuleBlock():
         self.selectors = selectors
         self.block = block
 
-    def css(self):
+    def css(self, tag=None):
         if not len(self.block):
             return ''
+        if self.tag and not tag == self.tag:
+            print('not matching:', tag, self.tag)
+            return ''
         outside = ' '.join(self.selectors)
-        inside = ''.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))  # ''
+        inside = ''.join(e.css(tag=tag) if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))
                          for e in self.block)
+        if not inside:
+            return ''
         return outside + "{" + inside + "}"
 
     def parent_selectors(self):
@@ -30,7 +35,11 @@ class CSSRule():
         self.prop = prop
         self.values = values
 
-    def css(self):
+    def css(self, tag=None):
+        print('CSSRule tag:', self.tag)
+        print('Passed tag:', tag)
+        if tag and not tag == self.tag:
+            return ''
         return self.prop + ":" + " ".join(str(x) for x in self.values) + ";"
 
 
@@ -49,7 +58,7 @@ class MixIn():
 
 
 class UnpackMe(list):
-    def css(self):
+    def css(self, tag=None):
         return ''
 
 

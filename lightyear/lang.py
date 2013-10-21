@@ -74,6 +74,7 @@ def selector_misc(env, node, children):
 @GDef(r'declaration = tag? property ":" _ expr+')
 def declaration(env, node, children):
     tag, prop, _, _, values = children
+    tag = tag[0] if tag else None
     return CSSRule(tag=tag,
                    prop=prop,
                    values=values)
@@ -143,7 +144,7 @@ def var_decl(env, node, children):
 def root_block(env, node, children):
     _, possible_name, _, _, possible_prefix = children
     tag_name = possible_name[0][1] if possible_name else None
-    prefix = possible_prefix or None
+    prefix = possible_prefix or ''
     return RootBlock(tag_name=tag_name, prefix=prefix)
 
 
@@ -244,6 +245,11 @@ def color_(env, node, children):
 
 ### Grammar rules with no associated function.  Returns empty list.
 
+@GDef(r'tag = "(" name ")" _')
+def tag(env, node, children):
+    return children[1]
+
+
 @GDef(r'unit = "em" / "ex" / "px" / "cm" / "mm" / "in" / "pt" / "pc" / "deg" / "rad" / "grad" / "ms" / "s" / "hz" / "khz" / "%"')
 def unit(env, node, children):
     return node.text
@@ -265,7 +271,6 @@ def any(env, node, children):
 
 
 GDef(r'''
-tag = "(" name ")" _
 
 _ = ~"[ \t]+"
 
