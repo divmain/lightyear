@@ -407,9 +407,9 @@ def test_flag_property_e():
             width: 20px
             (desktop) width: 50px
         (root)
-        (root.desktop) @media screen and (min-width: 970px)
+        (root.desktop) @media screen and (min-width:970px)
         ''')
-    o = '.test{width:20px;}@media screen and (min-width: 970px){.test{width:50px;}}'
+    o = '.test{width:20px;}@media screen and (min-width:970px){.test{width:50px;}}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
@@ -421,7 +421,7 @@ def test_flag_property_f():
             color: #000000
             (x) color: #FFFFFF
         (root)
-        (root.x) @media screen and (min-width: 970px)
+        (root.x) @media screen and (min-width:970px)
         ''')
     o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#FFFFFF;}}'
     ly = LyLang()
@@ -463,9 +463,9 @@ def test_flag_block_c():
         (x) .test
             color: #FFFFFF
         (root)
-        (root.x) @media screen and (min-width: 970px)
+        (root.x) @media screen and (min-width:970px)
         ''')
-    o = '.test{color:#000000;}@media screen and (min-width: 970px){.test{color:#FFFFFF;}}'
+    o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#FFFFFF;}}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
