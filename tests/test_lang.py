@@ -235,13 +235,25 @@ def test_division_float_b():
 
 # PROGRAMMATIC
 
-def test_variable():
+def test_variable_a():
     i = dedent('''
         x = #000000
         body
             color: x
         ''')
     o = 'body{color:#000000;}'
+    ly = LyLang()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_variable_b():
+    i = dedent('''
+        x = 16px
+        body
+            border: x + 8px
+        ''')
+    o = 'body{border:24px;}'
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
