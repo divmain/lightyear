@@ -469,3 +469,16 @@ def test_flag_block_c():
     ly = LyLang()
     ly.eval(i)
     assert ly.css() == o
+
+
+def test_multilevel_definitions():
+    i = dedent('''
+        p
+            width: 16px
+            a
+                color: red
+        ''')
+    o = 'p{width:16px;}p a{color:red;}'
+    ly = LyLang()
+    ly.eval(i)
+    assert ly.css() == o
