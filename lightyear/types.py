@@ -15,8 +15,14 @@ class RuleBlock():
         if self.tag and not tag == self.tag:
             return ''
         outside = ' '.join(self.selectors)
-        inside = ''.join(e.css(tag=tag) if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))
-                         for e in self.block)
+
+        if self.tag:
+            inside = ''.join(e.css() if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))
+                             for e in self.block)
+        else:
+            inside = ''.join(e.css(tag=tag) if hasattr(e, 'css') else '{} {}'.format(type(e), repr(e))
+                             for e in self.block)
+
         if not inside:
             return ''
         return outside + "{" + inside + "}"
