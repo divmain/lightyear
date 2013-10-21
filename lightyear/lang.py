@@ -231,7 +231,6 @@ def do_math(start, operations):
 
 @GDef(r'color = color_name / hexcolor')
 def color(env, node, children):
-    print('color:', node.text)
     return node.text
 
 
