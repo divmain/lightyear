@@ -84,7 +84,7 @@ def property_(env, node, children):
     return node.text
 
 
-@GDef(r'expr = (mixin_or_func_call / lvalue / math / color / string_val) _?')
+@GDef(r'expr = (mixin_or_func_call / math / color / string_val) _?')
 def expr(env, node, children):
     return children[0][0]
 
@@ -183,7 +183,7 @@ def operator_symbols(env, node, children):
     return node.text
 
 
-@GDef(r'value = num_val / paren')
+@GDef(r'value = num_val / lvalue / paren')
 def math_value(env, node, children):
     return children[0]
 
