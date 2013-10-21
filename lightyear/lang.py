@@ -142,7 +142,7 @@ def var_decl(env, node, children):
 @GDef(r'root_block = "(root" ("." name)? ")" ___ any')
 def root_block(env, node, children):
     _, possible_name, _, _, possible_prefix = children
-    tag_name = possible_name[1] if possible_name else None
+    tag_name = possible_name[0][1] if possible_name else None
     prefix = possible_prefix or None
     return RootBlock(tag_name=tag_name, prefix=prefix)
 
