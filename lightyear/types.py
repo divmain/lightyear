@@ -49,7 +49,8 @@ class MixIn():
 
 
 class UnpackMe(list):
-    pass
+    def css(self):
+        return ''
 
 
 class RootBlock():

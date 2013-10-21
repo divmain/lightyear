@@ -64,17 +64,13 @@ class LyLang(object):
         # Mixins return lists that need to be unpacked.
         for i, child in enumerate(children):
             if isinstance(child, UnpackMe):
-                offset = 1
-                for packed_child in child:
-                    children.insert(i+offset, packed_child)
-                    offset += 1
-                del children[i]
+                for packed_child in reversed(child):
+                    children.insert(i+1, packed_child)
 
         return fn(self.env, node, children)
 
     def css(self):
-        print('ltree ->', self.ltree)
-        return ''.join(e.css() if e else '' for e in self.ltree)
+        return ''.join(e.css() if hasattr(e, 'css') else '' for e in self.ltree)
 
     def resolve_parent_sels(self):
         for i, element in enumerate(self.ltree):
