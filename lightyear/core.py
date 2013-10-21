@@ -79,8 +79,6 @@ class LyLang(object):
 
         output = ''
         for root_block in root_blocks:
-            print('root_block')
-            if root_block.tag_name: print(root_block.tag_name)
             output += root_block.prefix
             output += ''.join(e.css(tag=root_block.tag_name) if hasattr(e, 'css') else '' for e in self.ltree)
 
