@@ -91,14 +91,14 @@ def expr(env, node, children):
 
 ### MIXINS, FUNCTIONS, and VARIABLES ###
 
-@GDef(r'mixin_decl = name "(" (name _)* "):" ___ block',
+@GDef(r'mixin_decl = name "(" (_? name _?)* "):" ___ block',
       defer=True)
 def mixin_decl(env, node):
     name, _, variables, _, _, block = node
 
     ly_engine = LyLang(env=env)
     name = ly_engine._evalnode(name)
-    variables = [varname for varname, _ in ly_engine._evalnode(variables)]
+    variables = [varname for _, varname, _ in ly_engine._evalnode(variables)]
 
     def f(*args):
         global_vars = list(env.items())
@@ -111,10 +111,10 @@ def mixin_decl(env, node):
     env[name] = MixIn(name=name, func=f)
 
 
-@GDef(r'mixin_or_func_call = name "(" (_ expr)* ")"')
+@GDef(r'mixin_or_func_call = name "(" (_? expr _?)* ")"')
 def mixin_or_func_call(env, node, children):
     name, _, args, _ = children
-    args = [arg for arg, _ in args]
+    args = [arg for _, arg, _ in args]
 
     if name in builtin_funcs:
         return builtin_funcs[name](*args)
