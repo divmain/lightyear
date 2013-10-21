@@ -24,6 +24,7 @@ def root_element(env, node, children):
 @GDef(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ block')
 def rule_block(env, node, children):
     tag, simple_sel, more_selectors, _, block = children
+    tag = tag[0] if tag else None
 
     selectors = [simple_sel]
     if more_selectors:
