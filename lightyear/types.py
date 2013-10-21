@@ -37,6 +37,8 @@ class CSSRule():
     def css(self, tag=None):
         if tag and not tag == self.tag:
             return ''
+        if self.tag and not tag:
+            return ''
         return self.prop + ":" + " ".join(str(x) for x in self.values) + ";"
 
 
