@@ -74,7 +74,6 @@ def selector_misc(env, node, children):
 @GDef(r'declaration = tag? property ":" _ expr+')
 def declaration(env, node, children):
     tag, prop, _, _, values = children
-    print('declaration children:', children)
     return CSSRule(tag=tag,
                    prop=prop,
                    values=values)
@@ -82,7 +81,6 @@ def declaration(env, node, children):
 
 @GDef(r'property = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
 def property_(env, node, children):
-    print('property', node.text)
     return node.text
 
 
