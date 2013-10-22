@@ -14,6 +14,9 @@ defer_children_eval = []
 ### GRAMMAR HANDLING ###
 
 class GDef(object):
+    '''
+    Decorator for defining LightYear syntax.
+    '''
     def __init__(self, ruletxt, defer=False):
         global ly_grammar
         ly_grammar += ruletxt + '\n'
@@ -35,6 +38,9 @@ class GDef(object):
 ### LIGHTYEAR PARSER ###
 
 class LyLang(object):
+    '''
+    Parses LightYear code and generates CSS as output.
+    '''
     grammar = None
 
     def __init__(self, env=None):
@@ -44,8 +50,8 @@ class LyLang(object):
 
     def eval(self, ly_code):
         '''
-        Takes as input a string containing LightYear code, and recursively
-        evaluates the root node.
+        Accept a string containing LightYear code as input, and recursively
+        evaluate the root node.
         '''
         ly_code = '\n'.join(tokenize_whitespace(ly_code))
         node = self.grammar.parse(ly_code)
@@ -54,7 +60,7 @@ class LyLang(object):
 
     def _evalnode(self, node):
         '''
-        Evaluates a Parsimonious node.
+        Evaluate a Parsimonious node.
         '''
         fn = funcmap.get(node.expr_name, lambda env, node, children: children)
         if node.expr_name in defer_children_eval:
@@ -70,6 +76,10 @@ class LyLang(object):
         return fn(self.env, node, children)
 
     def css(self):
+        '''
+        Output minified CSS.  Should not be run until LightYear code is
+        evaluated and the resulting structure flattened.
+        '''
         root_blocks = []
         for e in self.ltree:
             if isinstance(e, RootBlock):
@@ -89,18 +99,21 @@ class LyLang(object):
         return output
 
     def flatten(self):
+        '''
+        Flatten all nested rules and convert parent selectors
+        to standard selectors.  Execute only after LightYear
+        code evaluation.
+        '''
         for i, element in enumerate(self.ltree):
             if isinstance(element, RuleBlock):
                 for j, child_element in reversed(list(enumerate(element.block))):
-                    # Move nested RuleBlock objects to ltree and
-                    # modify selectors.
+                    # Move nested RuleBlock objects to ltree and modify selectors.
                     if isinstance(child_element, RuleBlock):
                         child_element.selectors = element.selectors + child_element.selectors
                         self.ltree.insert(i+1, child_element)
                         element.block[j] = IgnoreMe()
 
-                    # Find ParentSelector objects and create a
-                    # new RuleBlock object based upon it.
+                    # Find parent selectors and convert to standard RuleBlocks.
                     elif isinstance(child_element, ParentSelector):
                         ps_rule_block = child_element.rule_block
                         if len(ps_rule_block.selectors) > 1:
