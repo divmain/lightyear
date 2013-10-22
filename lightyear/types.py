@@ -104,7 +104,7 @@ class RootBlock():
 
 class IgnoreMe():
     '''
-    Replaces RuleBlocks or other objects that should not be evaluated when
+    To replace RuleBlocks or other objects that should not be evaluated when
     producing CSS.
     '''
     def css(self, tag=None):
