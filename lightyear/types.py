@@ -1,6 +1,8 @@
 from decimal import Decimal
+import re
 
 from lightyear.errors import IncompatibleUnits
+from .globals import NAMED_COLORS
 
 
 class RuleBlock():
@@ -162,3 +164,75 @@ class Distance():
         raise IncompatibleUnits(
             'Unit {} cannot be divided by unit {}.'.format(
                 self.unit, other.unit))
+
+
+class Color():
+    '''
+    Represents a CSS color.
+    '''
+    def __init__(self, text):
+        if text[:4] == 'rgb(':
+            self.type = 'rgb'
+            self.rgb = text
+        elif text[0] == '#':
+            if not len(text) == 7:
+                raise ValueError('Invalid hexidecimal value.')
+            self.type = 'hex'
+            self.hex = text
+        else:
+            self.type = 'named'
+            self.name = text
+
+    @property
+    def rgb(self):
+        return 'rgb({r}, {g}, {b})'.format(
+            r=self._r,
+            b=self._b,
+            g=self._g)
+
+    @rgb.setter
+    def rgb(self, text):
+        self._r, self._g, self._b = (
+            int(color)
+            for color in re.split('[\(\)]', text)[1].split(',')
+            )
+
+    @property
+    def hex(self):
+        return '#{r:0>2x}{g:0>2x}{b:0>2x}'.format(
+            r=self._r,
+            g=self._g,
+            b=self._b)
+
+    @hex.setter
+    def hex(self, text):
+        self._r, self._g, self._b = (
+            int(color, 16)
+            for color in (text[1:3], text[3:5], text[5:7])
+            )
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, text):
+        self._name = text
+        self.hex = NAMED_COLORS[text]
+
+    def __str__(self):
+        if self.type == 'rgb':
+            return self.rgb
+        elif self.type == 'hex':
+            return self.hex
+
+        # self.type == 'named'
+        if (self._name in NAMED_COLORS and NAMED_COLORS[self._name] == self.hex):
+            return self._name
+
+        _hex = self.hex
+        for name in NAMED_COLORS:
+            if _hex == NAMED_COLORS[name]:
+                return name
+
+        return _hex

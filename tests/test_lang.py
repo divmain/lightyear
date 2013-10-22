@@ -159,7 +159,7 @@ def test_multiple_scopes():
         h2
             color: #DDDDDD
         ''')
-    o = 'p{color:#FFFFFF;}h2{color:#DDDDDD;}'
+    o = 'p{color:#ffffff;}h2{color:#dddddd;}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
@@ -423,7 +423,7 @@ def test_flag_property_f():
         (root)
         (root.x) @media screen and (min-width:970px)
         ''')
-    o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#FFFFFF;}}'
+    o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#ffffff;}}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
@@ -447,10 +447,10 @@ def test_flag_block_b():
         .test
             color: #000000
         (x) .test
-            color: #FFFFFF
+            color: #FFFFFE
         (root.x)
         ''')
-    o = '.test{color:#FFFFFF;}'
+    o = '.test{color:#fffffe;}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
@@ -465,7 +465,7 @@ def test_flag_block_c():
         (root)
         (root.x) @media screen and (min-width:970px)
         ''')
-    o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#FFFFFF;}}'
+    o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#ffffff;}}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o

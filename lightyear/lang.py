@@ -3,7 +3,7 @@ from decimal import Decimal, getcontext
 getcontext().prec = 6
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
-from .types import RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock, Distance, ParentSelector
+from .types import RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock, Distance, ParentSelector, Color
 from .core import GDef
 from .builtins import builtin_funcs
 from .errors import UnknownMixinOrFunc
@@ -240,7 +240,7 @@ color_name = "aliceblue" / "antiquewhite" / "aqua" / "aquamarine" / "azure" / "b
 hexcolor = "#" ~"[0-9a-fA-F]+"
 ''')
 def color_(env, node, children):
-    return node.text
+    return Color(node.text)
 
 
 ### Grammar rules with no associated function.  Returns empty list.
