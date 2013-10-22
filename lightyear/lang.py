@@ -211,6 +211,11 @@ def num(env, node, children):
     return Decimal(node.text)
 
 
+@GDef(r'unit = "em" / "ex" / "px" / "cm" / "mm" / "in" / "pt" / "pc" / "deg" / "rad" / "grad" / "ms" / "s" / "hz" / "khz" / "%"')
+def unit(env, node, children):
+    return node.text
+
+
 ### MATH HELPER FUNCTION ###
 
 OPERATORS = {'+': op.add,
@@ -243,21 +248,11 @@ def color_(env, node, children):
     return Color(node.text)
 
 
-### Grammar rules with no associated function.  Returns empty list.
+### BASIC ###
 
 @GDef(r'tag = "(" name ")" _')
 def tag(env, node, children):
     return children[1]
-
-
-@GDef(r'unit = "em" / "ex" / "px" / "cm" / "mm" / "in" / "pt" / "pc" / "deg" / "rad" / "grad" / "ms" / "s" / "hz" / "khz" / "%"')
-def unit(env, node, children):
-    return node.text
-
-
-@GDef(r'___ = ~"[\s]*" (comment ~"[\s]*")*')
-def space_and_comments(env, node, children):
-    return None
 
 
 @GDef(r'name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
@@ -270,17 +265,19 @@ def any(env, node, children):
     return node.text.strip()
 
 
-GDef(r'''
-
+@GDef(r'''
+___ = ~"[\s]*" (comment ~"[\s]*")*
 _ = ~"[ \t]+"
-
 blk_open = "{blk_open}"
 blk_close = "{blk_close}"
 comment = ~"{comment_delim}[^{comment_delim}]*{comment_delim}"
 '''.format(
     comment_delim=COMMENT_DELIM,
     blk_open=BLK_OPEN,
-    blk_close=BLK_CLOSE))
+    blk_close=BLK_CLOSE)
+)
+def return_none(env, node, children):
+    return None
 
 
 from .core import LY
