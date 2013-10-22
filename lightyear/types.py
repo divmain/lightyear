@@ -8,6 +8,7 @@ class RuleBlock():
         self.tag = tag
         self.selectors = selectors
         self.block = block
+        print('RuleBlock created:', self, selectors)
 
     def css(self, tag=None):
         if not len(self.block):
