@@ -37,7 +37,7 @@ class GDef(object):
 
 ### LIGHTYEAR PARSER ###
 
-class LyLang(object):
+class LY(object):
     '''
     Parses LightYear code and generates CSS as output.
     '''
@@ -136,7 +136,7 @@ class LyLang(object):
                         element.block[j] = IgnoreMe()
 
 
-# Import LightYear grammar after LyLang class definition.
+# Import LightYear grammar after LY class definition.
 from . import lang
 
 

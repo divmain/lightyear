@@ -98,7 +98,7 @@ def expr(env, node, children):
 def mixin_decl(env, node):
     name, _, variables, _, _, block = node
 
-    ly_engine = LyLang(env=env)
+    ly_engine = LY(env=env)
     name = ly_engine._evalnode(name)
     variables = [varname for _, varname, _ in ly_engine._evalnode(variables)]
 
@@ -107,7 +107,7 @@ def mixin_decl(env, node):
         local_vars = list(zip(variables, args))
         temp_env = dict(global_vars + local_vars)
 
-        ly_engine_local = LyLang(env=temp_env)
+        ly_engine_local = LY(env=temp_env)
         return ly_engine_local._evalnode(block)
 
     env[name] = MixIn(name=name, func=f)
@@ -283,4 +283,4 @@ comment = ~"{comment_delim}[^{comment_delim}]*{comment_delim}"
     blk_close=BLK_CLOSE))
 
 
-from .core import LyLang
+from .core import LY

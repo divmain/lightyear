@@ -1,7 +1,7 @@
 from textwrap import dedent
 
 import env
-from lightyear import LyLang
+from lightyear import LY
 
 
 # SELECTORS
@@ -9,7 +9,7 @@ from lightyear import LyLang
 def test_simplest():
     i = 'body\n    width: 32px'
     o = 'body{width:32px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -20,7 +20,7 @@ def test_type_sel():
             color: #000000
         ''')
     o = 'body{color:#000000;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -33,7 +33,7 @@ def test_type_multiple_properties():
             width: 32px
         ''')
     o = 'div{color:#000000;display:block;width:32px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -45,7 +45,7 @@ def test_multiple_values():
             border: 1px 2px 3px 4px
         ''')
     o = 'div{color:#000000;border:1px 2px 3px 4px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -56,7 +56,7 @@ def test_universal_sel():
             border: none
         ''')
     o = '*{border:none;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -67,7 +67,7 @@ def test_attribute_sel():
             display: inline
         ''')
     o = 'a[class=happy]{display:inline;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -78,7 +78,7 @@ def test_id_sel():
             display: block
         ''')
     o = '#first{display:block;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -89,7 +89,7 @@ def test_id_type_sel():
             display: block
         ''')
     o = 'a#first{display:block;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -100,7 +100,7 @@ def test_pseudo_class_param():
             color: black
         ''')
     o = 'li:nth-child(2){color:black;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -111,7 +111,7 @@ def test_pseudo_class_noparam():
             color: white
         ''')
     o = 'a:hover{color:white;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -122,7 +122,7 @@ def test_pseudo_class_noparam():
 #             background-color: yellow
 #         ''')
 #     o = 'p:not(#example) {background-color: yellow;}'
-#     ly = LyLang()
+#     ly = LY()
 #     ly.eval(i)
 #     assert ly.css() == o
 
@@ -134,7 +134,7 @@ def test_parent_selector_a():
                 background-color: yellow
         ''')
     o = 'p#first{background-color:yellow;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -147,7 +147,7 @@ def test_parent_selector_b():
                     background-color: yellow
         ''')
     o = 'p a#first{background-color:yellow;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -160,7 +160,7 @@ def test_multiple_scopes():
             color: #DDDDDD
         ''')
     o = 'p{color:#FFFFFF;}h2{color:#DDDDDD;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -173,7 +173,7 @@ def test_addition():
             width: 8px + 2
         ''')
     o = 'li{width:10px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -184,7 +184,7 @@ def test_subtraction():
             left: 0px - 4px
         ''')
     o = '.button{left:-4px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -195,7 +195,7 @@ def test_multiplication():
             width: 4em * 8
         ''')
     o = '.button{width:32em;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -206,7 +206,7 @@ def test_division_int():
             width: 20px / 4
         ''')
     o = 'div#first.button{width:5px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -217,7 +217,7 @@ def test_division_float_a():
             height: 10px / 4
         ''')
     o = '#last{height:2.5px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -228,7 +228,7 @@ def test_division_float_b():
             height: 10px / 3
         ''')
     o = '#last{height:3.33333px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -242,7 +242,7 @@ def test_variable_a():
             color: x
         ''')
     o = 'body{color:#000000;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -254,7 +254,7 @@ def test_variable_b():
             border: x + 8px
         ''')
     o = 'body{border:24px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -268,7 +268,7 @@ def test_mixin_decl_without_call():
             width: 5px
         ''')
     o = '.example{width:5px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -283,7 +283,7 @@ def test_mixin_a():
             mixin()
         ''')
     o = '.example{color:white;width:10px;height:20px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -297,7 +297,7 @@ def test_mixin_b():
             mixin(5px 10px)
         ''')
     o = '.example{width:5px;height:10px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -311,7 +311,7 @@ def test_mixin_c():
             mixin(5px 10px)
         ''')
     o = '.example{width:10px;height:15px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -325,7 +325,7 @@ def test_mixin_variable_a():
             mixin()
         ''')
     o = '.example{width:25px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -339,7 +339,7 @@ def test_mixin_variable_b():
             mixin(30px 50px)
         ''')
     o = '.example{width:100px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -354,7 +354,7 @@ def test_flag_property_a():
         (root.x)
         ''')
     o = '.test{width:50px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -367,7 +367,7 @@ def test_flag_property_b():
         (root.y)
         ''')
     o = '.test{width:20px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -381,7 +381,7 @@ def test_flag_property_c():
         (root.y)
         ''')
     o = '.test{width:50px;}.test{height:20px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -396,7 +396,7 @@ def test_flag_property_d():
         (root.y)
         ''')
     o = '.testA{width:50px;}.testB{height:20px;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -410,7 +410,7 @@ def test_flag_property_e():
         (root.desktop) @media screen and (min-width:970px)
         ''')
     o = '.test{width:20px;}@media screen and (min-width:970px){.test{width:50px;}}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -424,7 +424,7 @@ def test_flag_property_f():
         (root.x) @media screen and (min-width:970px)
         ''')
     o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#FFFFFF;}}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -437,7 +437,7 @@ def test_flag_block_a():
             color: #FFFFFF
         ''')
     o = '.test{color:#000000;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -451,7 +451,7 @@ def test_flag_block_b():
         (root.x)
         ''')
     o = '.test{color:#FFFFFF;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -466,7 +466,7 @@ def test_flag_block_c():
         (root.x) @media screen and (min-width:970px)
         ''')
     o = '.test{color:#000000;}@media screen and (min-width:970px){.test{color:#FFFFFF;}}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o
 
@@ -479,6 +479,6 @@ def test_multilevel_definitions():
                 color: red
         ''')
     o = 'p{width:16px;}p a{color:red;}'
-    ly = LyLang()
+    ly = LY()
     ly.eval(i)
     assert ly.css() == o

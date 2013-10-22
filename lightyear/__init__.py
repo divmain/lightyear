@@ -1,1 +1,1 @@
-from .core import LyLang
+from .core import LY
