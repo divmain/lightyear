@@ -2,6 +2,17 @@ from decimal import Decimal
 from .types import Color, Distance
 
 
+builtin_funcs = {}
+
+
+### HELPER FUNCTIONS ###
+
+def bif(f):
+    'Decorator to build builtin_funcs dict.'
+    builtin_funcs[f.__name__] = f
+
+
+@bif
 def darken(color, amount):
     if not isinstance(color, Color):
         raise ValueError('Cannot darken non-color:', str(color))
@@ -33,6 +44,7 @@ def darken(color, amount):
     raise ValueError('Cannot darken by value:', str(amount))
 
 
+@bif
 def lighten(color, amount):
     if not isinstance(color, Color):
         raise ValueError('Cannot lighten non-color:', str(color))
@@ -62,9 +74,3 @@ def lighten(color, amount):
         return color
 
     raise ValueError('Cannot lighten by value:', str(amount))
-
-
-builtin_funcs = {
-    'darken': darken,
-    'lighten': lighten,
-    }
