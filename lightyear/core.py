@@ -4,7 +4,7 @@ from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
-from .types import RuleBlock, UnpackMe, RootBlock
+from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentSelector
 
 ly_grammar = ""
 funcmap = {}
@@ -50,7 +50,7 @@ class LyLang(object):
         ly_code = '\n'.join(tokenize_whitespace(ly_code))
         node = self.grammar.parse(ly_code)
         self.ltree = self._evalnode(node)
-        self.resolve_parent_sels()
+        self.flatten()
 
     def _evalnode(self, node):
         '''
@@ -88,27 +88,39 @@ class LyLang(object):
 
         return output
 
-    def resolve_parent_sels(self):
+    def flatten(self):
         for i, element in enumerate(self.ltree):
             if isinstance(element, RuleBlock):
-                for parent_selector in element.parent_selectors():
-                    ps_rule_block = parent_selector.rule_block
-                    if len(ps_rule_block.selectors) > 1:
-                        new_selectors = (
-                            element.selectors[:-1] +
-                            [element.selectors[-1] + ps_rule_block.selectors[0]] +
-                            ps_rule_block.selectors[1:]
-                            )
-                    else:
-                        new_selectors = (
-                            element.selectors[:-1] +
-                            [element.selectors[-1] + ps_rule_block.selectors[0]]
-                            )
-                    new_block = RuleBlock(
-                        tag=ps_rule_block.tag,
-                        selectors=new_selectors,
-                        block=ps_rule_block.block)
-                    self.ltree.insert(i+1, new_block)
+                for j, child_element in reversed(list(enumerate(element.block))):
+                    # Move nested RuleBlock objects to ltree and
+                    # modify selectors.
+                    if isinstance(child_element, RuleBlock):
+                        child_element.selectors = element.selectors + child_element.selectors
+                        self.ltree.insert(i+1, child_element)
+                        element.block[j] = IgnoreMe()
+
+                    # Find ParentSelector objects and create a
+                    # new RuleBlock object based upon it.
+                    elif isinstance(child_element, ParentSelector):
+                        ps_rule_block = child_element.rule_block
+                        if len(ps_rule_block.selectors) > 1:
+                            new_selectors = (
+                                child_element.selectors[:-1] +
+                                [child_element.selectors[-1] + ps_rule_block.selectors[0]] +
+                                ps_rule_block.selectors[1:]
+                                )
+                        else:
+                            new_selectors = (
+                                element.selectors[:-1] +
+                                [element.selectors[-1] + ps_rule_block.selectors[0]]
+                                )
+                        new_block = RuleBlock(
+                            tag=ps_rule_block.tag,
+                            selectors=new_selectors,
+                            block=ps_rule_block.block)
+                        self.ltree.insert(i+1, new_block)
+
+                        element.block[j] = IgnoreMe()
 
 
 # Import LightYear grammar after LyLang class definition.

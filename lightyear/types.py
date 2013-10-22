@@ -27,12 +27,6 @@ class RuleBlock():
             return ''
         return outside + "{" + inside + "}"
 
-    def parent_selectors(self):
-        for i, element in reversed(list(enumerate(self.block))):
-            if isinstance(element, ParentSelector):
-                yield element
-                del self.block[i]
-
 
 class CSSRule():
     def __init__(self, tag, prop, values):
@@ -71,6 +65,11 @@ class RootBlock():
     def __init__(self, tag_name, prefix):
         self.tag_name = tag_name
         self.prefix = prefix
+
+
+class IgnoreMe():
+    def css(self, tag=None):
+        return ''
 
 
 class Distance():
