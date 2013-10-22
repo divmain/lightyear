@@ -5,7 +5,7 @@ getcontext().prec = 6
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
 from .types import RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock, Distance, ParentSelector, Color
 from .core import GDef
-from .builtins import builtin_funcs
+from .functions import builtin_funcs
 from .errors import UnknownMixinOrFunc
 
 
