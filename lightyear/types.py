@@ -42,6 +42,41 @@ class RuleBlock():
         return outside + "{" + inside + "}"
 
 
+class AtRuleBlock():
+    '''
+    Represents a CSS at-rule and any children objects.
+    '''
+    def __init__(self, tag, text, block):
+        self.tag = tag
+        self.text = text
+        self.block = block
+
+    def css(self, tag=None):
+        '''
+        Return valid CSS for self and nested property/value declarations.
+        '''
+        if not len(self.block):
+            return ''
+        if self.tag and not tag == self.tag:
+            return ''
+        outside = '@' + self.text
+
+        if self.tag:
+            inside = ''.join(
+                e.css() if hasattr(e, 'css')
+                else '{} {}'.format(type(e), repr(e))
+                for e in self.block)
+        else:
+            inside = ''.join(
+                e.css(tag=tag) if hasattr(e, 'css')
+                else '{} {}'.format(type(e), repr(e))
+                for e in self.block)
+
+        if not inside:
+            return ''
+        return outside + "{" + inside + "}"
+
+
 class CSSRule():
     '''
     Represents CSS property/value declarations.

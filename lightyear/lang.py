@@ -3,7 +3,8 @@ from decimal import Decimal, getcontext
 getcontext().prec = 6
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
-from .types import RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock, Distance, ParentSelector, Color
+from .types import (RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock,
+                    Distance, ParentSelector, Color, AtRuleBlock)
 from .core import GDef
 from .functions import builtin_funcs
 from .errors import UnknownMixinOrFunc
@@ -14,7 +15,7 @@ def ltree(env, node, children):
     return children
 
 
-@GDef(r'root_element = ___ (root_block / mixin_decl / var_decl / rule_block) ___')
+@GDef(r'root_element = ___ (root_block / at_rule / mixin_decl / var_decl / rule_block) ___')
 def root_element(env, node, children):
     return children[1][0]
 
@@ -68,6 +69,19 @@ pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-c
 ''')
 def selector_misc(env, node, children):
     return node.text
+
+
+### AT-RULES ###
+
+@GDef(r'at_rule = tag? "@" any ___ block')
+def at_rule(env, node, children):
+    print(children)
+    tag, _, text, _, block = children
+    tag = tag[0] if tag else None
+
+    return AtRuleBlock(tag=tag,
+                       text=text.strip(),
+                       block=block)
 
 
 ### CSS RULES ###
@@ -265,7 +279,7 @@ def name(env, node, children):
     return node.text
 
 
-@GDef(r'any = ~".*"')
+@GDef(r'any = ~".+"')
 def any(env, node, children):
     return node.text.strip()
 

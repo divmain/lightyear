@@ -482,3 +482,25 @@ def test_multilevel_definitions():
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
+
+
+### AT-RULES ###
+
+def test_font_face():
+    i = dedent('''
+        @font-face
+            font-family: Open Sans
+            src: url("fonts/OpenSans-Regular-webfont.eot")
+            font-weight: normal
+            font-weight: 400
+            font-style: normal
+        .opensans
+            font-family: Open Sans
+        ''')
+    o = ('@font-face{'
+         'font-family:Open Sans;src:url(fonts/OpenSans-Regular-webfont.eot);'
+         'font-weight:normal;font-weight:400;font-style:normal;}'
+         '.opensans{font-family:Open Sans;}')
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
