@@ -20,7 +20,7 @@ def test_rgb_darken_a():
         p
             color: darken(rgb(255 255 255) 10%)
         ''')
-    o = 'p{color:rgb(229,229,229);}'
+    o = 'p{color:rgb(229.5,229.5,229.5);}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
