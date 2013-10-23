@@ -61,6 +61,28 @@ def test_darken_e():
     assert ly.css() == o
 
 
+def test_darken_f():
+    i = dedent('''
+        p
+            color: darken(white 10%)
+        ''')
+    o = 'p{color:#e5e5e5;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_darken_g():
+    i = dedent('''
+        p
+            color: darken(white #ff9bff)
+        ''')
+    o = 'p{color:darkgreen;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 def test_lighten_a():
     i = dedent('''
         p
@@ -111,6 +133,28 @@ def test_lighten_e():
             color: lighten(#96fa42 #69060c)
         ''')
     o = 'p{color:#ffff4e;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_lighten_f():
+    i = dedent('''
+        p
+            color: lighten(black 16)
+        ''')
+    o = 'p{color:#101010;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_lighten_g():
+    i = dedent('''
+        p
+            color: lighten(black #bdb76b)
+        ''')
+    o = 'p{color:darkkhaki;}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
