@@ -151,7 +151,7 @@ def root_block(env, node, children):
 
 ### TEXT ###
 
-@GDef(r'''string_val = ~'\"[^"\n]\"' ''')
+@GDef(r'''string_val = ~'\"[^"\n]*\"' ''')
 def string_val(env, node, children):
     return node.text
 
