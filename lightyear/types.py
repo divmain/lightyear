@@ -132,11 +132,23 @@ class Distance():
             'Unit {} cannot be added to unit {}.'.format(
                 self.unit, other.unit))
 
+    def __radd__(self, other):
+        return self.__add__(other)
+
     def __sub__(self, other):
         if isinstance(other, Decimal):
             return Distance(self.value - other, self.unit)
         elif isinstance(other, Distance) and other.unit == self.unit:
             return Distance(self.value - other.value, self.unit)
+        raise IncompatibleUnits(
+            'Unit {} cannot be subtracted from unit {}.'.format(
+                self.unit, other.unit))
+
+    def __rsub__(self, other):
+        if isinstance(other, Decimal):
+            return Distance(other - self.value, self.unit)
+        elif isinstance(other, Distance) and other.unit == self.unit:
+            return Distance(other.value - self.value, self.unit)
         raise IncompatibleUnits(
             'Unit {} cannot be subtracted from unit {}.'.format(
                 self.unit, other.unit))
@@ -150,11 +162,23 @@ class Distance():
             'Unit {} cannot be multiplied with unit {}.'.format(
                 self.unit, other.unit))
 
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
     def __truediv__(self, other):
         if isinstance(other, Decimal):
             return Distance(self.value / other, self.unit)
         elif isinstance(other, Distance) and other.unit == self.unit:
             return Distance(self.value / other.value, self.unit)
+        raise IncompatibleUnits(
+            'Unit {} cannot be divided by unit {}.'.format(
+                self.unit, other.unit))
+
+    def __rtruediv__(self, other):
+        if isinstance(other, Decimal):
+            return Distance(other / self.value, self.unit)
+        elif isinstance(other, Distance) and other.unit == self.unit:
+            return Distance(other.value / self.value, self.unit)
         raise IncompatibleUnits(
             'Unit {} cannot be divided by unit {}.'.format(
                 self.unit, other.unit))
