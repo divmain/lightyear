@@ -504,3 +504,42 @@ def test_font_face():
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
+
+
+def test_atrule_tag_a():
+    i = dedent('''
+        (d) @media screen and (min-width:970px)
+            body
+                width: 100%
+        (root.d)
+        ''')
+    o = ('@media screen and (min-width:970px){body{width:100%;}}')
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_atrule_tag_b():
+    i = dedent('''
+        (d) @media screen and (min-width:970px)
+            body
+                width: 100%
+        (root)
+        ''')
+    o = ''
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_atrule_tag_c():
+    i = dedent('''
+        (d) @media screen and (min-width:970px)
+            body
+                width: 100%
+        (root.m)
+        ''')
+    o = ''
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
