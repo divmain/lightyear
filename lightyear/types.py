@@ -1,5 +1,6 @@
 from decimal import Decimal
-import re
+from colorsys import hls_to_rgb, rgb_to_hls
+from math import ceil
 
 from .errors import IncompatibleUnits
 from .globals import NAMED_COLORS
@@ -187,6 +188,12 @@ class Color():
         elif ctype == 'rgba':
             self.rgba = color
 
+        elif ctype == 'hsl':
+            self.hsl = color
+
+        elif ctype == 'hsla':
+            self.hsla = color
+
     @property
     def rgba(self):
         return 'rgba({r},{g},{b},{a}'.format(
@@ -233,11 +240,61 @@ class Color():
         self._name = text
         self.hex = NAMED_COLORS[text]
 
+    @property
+    def hsla(self):
+        rnd = lambda x: ceil(x * 10000) / Decimal('10000')
+
+        r, g, b = float(self._r / 255), float(self._g / 255), float(self._b / 255)
+        h, l, s = rgb_to_hls(r, g, b)
+
+        h = rnd(360 * h)
+        s = rnd(100 * s)
+        l = rnd(100 * l)
+
+        return 'hsla({h},{s}%,{l}%,{a})'.format(
+            h=h,
+            s=s,
+            l=l,
+            a=self._a)
+
+    @hsla.setter
+    def hsla(self, color):
+        rnd = lambda x: ceil(x * 10000) / Decimal('10000')
+
+        h, s, l, a = color
+        if not (isinstance(h, Decimal) and
+                isinstance(s, Distance) and s.unit == '%' and
+                isinstance(l, Distance) and s.unit == '%' and
+                isinstance(a, Decimal)):
+            raise ValueError('Function hsl/hsla requires whole number for h and percent for s and l.')
+
+        h /= 360
+        s = s.value / 100
+        l = l.value / 100
+
+        self._r, self._g, self._b = (255*rnd(x) for x in hls_to_rgb(float(h), float(l), float(s)))
+
+        self._a = a
+
+    @property
+    def hsl(self):
+        return ','.join(self.hsla.split(',')[:-1]).replace('hsla', 'hsl') + ')'
+
+    @hsl.setter
+    def hsl(self, color):
+        self.hsla = tuple(color) + (Decimal('1'), )
+
     def __str__(self):
         if self.type == 'rgb':
             return self.rgb
+        elif self.type == 'rgba':
+            return self.rgba
         elif self.type == 'hex':
             return self.hex
+        elif self.type == 'hsl':
+            return self.hsl
+        elif self.type == 'hsla':
+            return self.hsla
 
         # self.type == 'named'
         if (self._name in NAMED_COLORS and NAMED_COLORS[self._name] == self.hex):

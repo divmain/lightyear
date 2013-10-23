@@ -26,6 +26,28 @@ def test_rgb_darken_a():
     assert ly.css() == o
 
 
+def test_hsl_darken_a():
+    i = dedent(r'''
+        p
+            color: hsl(190 30% 94%)
+        ''')
+    o = 'p{color:hsl(190,30%,94%);}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_hsl_darken_b():
+    i = dedent(r'''
+        p
+            color: darken(hsl(190 30% 94%) 10%)
+        ''')
+    o = 'p{color:hsl(190,30%,84.6%);}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 # def test_darken_b():
 #     i = dedent('''
 #         p

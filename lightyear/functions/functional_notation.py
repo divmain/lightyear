@@ -14,3 +14,13 @@ def rgb(red, green, blue):
 @bifunc
 def rgba(red, green, blue, alpha):
     return Color((red, green, blue, alpha), ctype='rgba')
+
+
+@bifunc
+def hsl(hue, saturation, lightness):
+    return Color((hue, saturation, lightness), ctype='hsl')
+
+
+@bifunc
+def hsla(hue, saturation, lightness, alpha):
+    return Color((hue, saturation, lightness, alpha), ctype='hsla')
