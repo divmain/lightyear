@@ -141,11 +141,14 @@ def var_decl(env, node, children):
 
 ### ROOT BLOCKS ###
 
-@GDef(r'root_block = "(root" ("." name)? ")" any')
+@GDef(r'root_block = "(root" ("." name)? ")" _? string_val?')
 def root_block(env, node, children):
-    _, possible_name, _, possible_prefix = children
+    _, possible_name, _, _, prefix = children
     tag_name = possible_name[0][1] if possible_name else None
-    prefix = possible_prefix or ''
+    if not prefix:
+        prefix = ''
+    else:
+        prefix = prefix[0]
     return RootBlock(tag_name=tag_name, prefix=prefix)
 
 
