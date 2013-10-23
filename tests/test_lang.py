@@ -543,3 +543,132 @@ def test_atrule_tag_c():
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
+
+
+def test_keyframe_a():
+    i = dedent('''
+        div
+            width: 100px
+            height: 100px
+            background: red
+            position: relative
+            animation: warpmove 5s infinite
+        @keyframes warpmove
+            0%
+                top: 0px
+                background: red
+                width: 100px
+            100%
+                top: 200px
+                background: yellow
+                width: 300px
+        ''')
+    o = ('div{width:100px;height:100px;background:red;position:relative;animation:warpmove 5s infinite;}'
+         '@keyframes warpmove{0%{top:0px;background:red;width:100px;}'
+         '100%{top:200px;background:yellow;width:300px;}}')
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_keyframe_b():
+    i = dedent('''
+        div
+            width: 100px
+            height: 100px
+            background: red
+            position: relative
+            animation: warpmove 5s infinite
+        @keyframes warpmove
+            0%
+                top: 0px
+                background: red
+                width: 100px
+            (maybe) 50%
+                top: 170px
+                background: blue
+                width: 50px
+            100%
+                top: 200px
+                background: yellow
+                width: 300px
+        (root)
+        ''')
+    o = ('div{width:100px;height:100px;background:red;position:relative;animation:warpmove 5s infinite;}'
+         '@keyframes warpmove{0%{top:0px;background:red;width:100px;}'
+         '100%{top:200px;background:yellow;width:300px;}}')
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_keyframe_c():
+    i = dedent('''
+        div
+            width: 100px
+            height: 100px
+            background: red
+            position: relative
+            animation: warpmove 5s infinite
+        @keyframes warpmove
+            (a) 0%
+                top: 0px
+                background: red
+                width: 100px
+            (b) 0%
+                top: 170px
+                background: blue
+                width: 50px
+            (a) 100%
+                top: 200px
+                background: yellow
+                width: 300px
+            (b) 100%
+                top: 300px
+                background: yellow
+                width: 500px
+        (root)
+        (root.a)
+        ''')
+    o = ('div{width:100px;height:100px;background:red;position:relative;animation:warpmove 5s infinite;}'
+         '@keyframes warpmove{0%{top:0px;background:red;width:100px;}'
+         '100%{top:200px;background:yellow;width:300px;}}')
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_keyframe_d():
+    i = dedent('''
+        div
+            width: 100px
+            height: 100px
+            background: red
+            position: relative
+            animation: warpmove 5s infinite
+        @keyframes warpmove
+            (a) 0%
+                top: 0px
+                background: red
+                width: 100px
+            (b) 0%
+                top: 170px
+                background: blue
+                width: 50px
+            (a) 100%
+                top: 200px
+                background: yellow
+                width: 300px
+            (b) 100%
+                top: 300px
+                background: yellow
+                width: 500px
+        (root)
+        (root.b)
+        ''')
+    o = ('div{width:100px;height:100px;background:red;position:relative;animation:warpmove 5s infinite;}'
+         '@keyframes warpmove{0%{top:170px;background:blue;width:50px;}'
+         '100%{top:300px;background:yellow;width:500px;}}')
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
