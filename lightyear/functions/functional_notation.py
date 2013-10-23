@@ -25,6 +25,11 @@ def calc(*args):
     return 'calc({})'.format(''.join(str(arg) for arg in args))
 
 
+@bifunc
+def attr(text):
+    return 'attr({})'.format(text)
+
+
 ### COLORS
 
 @bifunc

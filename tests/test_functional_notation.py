@@ -44,6 +44,17 @@ def test_calc():
     assert ly.css() == o
 
 
+def test_attr():
+    i = dedent('''
+        article
+            width: attr("size em 0")
+        ''')
+    o = 'article{width:attr(size em 0);}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 ### COLORS ###
 
 def test_rgb_a():
