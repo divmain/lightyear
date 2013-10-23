@@ -213,9 +213,9 @@ class Color():
     @property
     def hex(self):
         return '#{r:0>2x}{g:0>2x}{b:0>2x}'.format(
-            r=self._r,
-            g=self._g,
-            b=self._b)
+            r=int(self._r),
+            g=int(self._g),
+            b=int(self._b))
 
     @hex.setter
     def hex(self, text):
