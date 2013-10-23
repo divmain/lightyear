@@ -13,6 +13,11 @@ def url(text):
     return 'url({})'.format(text)
 
 
+@bifunc
+def toggle(text):
+    return 'toggle({})'.format(text)
+
+
 ### VALUES AND UNITS ###
 
 @bifunc

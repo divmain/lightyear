@@ -17,6 +17,17 @@ def test_url():
     assert ly.css() == o
 
 
+def test_toggle():
+    i = dedent('''
+        div#article
+            font-style: toggle("italic, normal")
+        ''')
+    o = 'div#article{font-style:toggle(italic, normal);}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 ### VALUES AND UNITS ###
 
 def test_calc():
