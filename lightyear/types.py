@@ -1,7 +1,7 @@
 from decimal import Decimal
 import re
 
-from lightyear.errors import IncompatibleUnits
+from .errors import IncompatibleUnits
 from .globals import NAMED_COLORS
 
 
