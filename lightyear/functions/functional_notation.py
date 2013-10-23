@@ -6,6 +6,15 @@ from . import bifunc
 from ..types import Color
 
 
+### SYNTAX
+
+@bifunc
+def url(text):
+    return 'url({})'.format(text)
+
+
+### COLORS
+
 @bifunc
 def rgb(red, green, blue):
     return Color((red, green, blue), ctype='rgb')

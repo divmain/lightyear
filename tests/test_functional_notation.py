@@ -4,6 +4,21 @@ import env
 from lightyear import LY
 
 
+### SYNTAX ###
+
+def test_url():
+    i = dedent('''
+        div#header
+            background-image: url("images/header.jpg")
+        ''')
+    o = 'div#header{background-image:url(images/header.jpg);}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+### COLORS ###
+
 def test_rgb_a():
     i = dedent('''
         p
