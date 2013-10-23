@@ -170,32 +170,45 @@ class Color():
     '''
     Represents a CSS color.
     '''
-    def __init__(self, text):
-        if text[:4] == 'rgb(':
-            self.type = 'rgb'
-            self.rgb = text
-        elif text[0] == '#':
-            if not len(text) == 7:
-                raise ValueError('Invalid hexidecimal value.')
-            self.type = 'hex'
-            self.hex = text
-        else:
-            self.type = 'named'
-            self.name = text
+    def __init__(self, color, ctype):
+        self.type = ctype
+
+        if ctype == 'named':
+            self.name = color
+
+        elif ctype == 'hex':
+            if not len(color) == 7:
+                raise ValueError('Invalid hexidecimal color.')
+            self.hex = color
+
+        elif ctype == 'rgb':
+            self.rgb = color
+
+        elif ctype == 'rgba':
+            self.rgba = color
+
+    @property
+    def rgba(self):
+        return 'rgba({r},{g},{b},{a}'.format(
+            r=self._r,
+            g=self._g,
+            b=self._b,
+            a=self._a)
+
+    @rgba.setter
+    def rgba(self, color):
+        self._r, self._g, self._b, self._a = color
 
     @property
     def rgb(self):
-        return 'rgb({r}, {g}, {b})'.format(
+        return 'rgb({r},{g},{b})'.format(
             r=self._r,
             b=self._b,
             g=self._g)
 
     @rgb.setter
-    def rgb(self, text):
-        self._r, self._g, self._b = (
-            int(color)
-            for color in re.split('[\(\)]', text)[1].split(',')
-            )
+    def rgb(self, color):
+        self.rgba = tuple(color) + (Decimal('1'), )
 
     @property
     def hex(self):
@@ -206,7 +219,7 @@ class Color():
 
     @hex.setter
     def hex(self, text):
-        self._r, self._g, self._b = (
+        self.rgb = (
             int(color, 16)
             for color in (text[1:3], text[3:5], text[5:7])
             )

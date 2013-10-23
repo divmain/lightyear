@@ -11,3 +11,4 @@ def bifunc(f):
 ### BUILT-IN LIGHTYEAR FUNCTIONS ###
 
 from . import colors
+from . import functional_notation
