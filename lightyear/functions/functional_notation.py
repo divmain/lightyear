@@ -13,6 +13,13 @@ def url(text):
     return 'url({})'.format(text)
 
 
+### VALUES AND UNITS ###
+
+@bifunc
+def calc(*args):
+    return 'calc({})'.format(''.join(str(arg) for arg in args))
+
+
 ### COLORS
 
 @bifunc

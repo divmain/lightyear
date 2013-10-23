@@ -17,6 +17,22 @@ def test_url():
     assert ly.css() == o
 
 
+### VALUES AND UNITS ###
+
+def test_calc():
+    i = dedent('''
+        section
+            float: left
+            margin: 1em
+            border: solid 1px
+            width: calc("100%/3 - 2*1em - " 2 * 1px)
+        ''')
+    o = 'section{float:left;margin:1em;border:solid 1px;width:calc(100%/3 - 2*1em - 2px);}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 ### COLORS ###
 
 def test_rgb_a():
