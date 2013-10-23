@@ -4,7 +4,7 @@ getcontext().prec = 6
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
 from .types import (RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock,
-                    Distance, ParentSelector, Color, AtRuleBlock)
+                    Distance, ParentSelector, Color, AtRuleBlock, Keyframe)
 from .core import GDef
 from .functions import builtin_funcs
 from .errors import UnknownMixinOrFunc
@@ -73,15 +73,41 @@ def selector_misc(env, node, children):
 
 ### AT-RULES ###
 
-@GDef(r'at_rule = tag? "@" any ___ block')
+@GDef(r'at_rule = tag? "@" (at_rule_keyframe / at_rule_normal)')
 def at_rule(env, node, children):
-    print(children)
-    tag, _, text, _, block = children
-    tag = tag[0] if tag else None
+    tag = children[0][0] if children[0] else None
+    text, block = children[2][0]
 
     return AtRuleBlock(tag=tag,
                        text=text.strip(),
                        block=block)
+
+
+@GDef(r'at_rule_normal = any ___ block')
+def at_rule_normal(env, node, children):
+    text, _, block = children
+    return (text, block)
+
+
+@GDef(r'at_rule_keyframe = "keyframes" _ name ___ keyframes_block')
+def at_rule_keyframes(env, node, children):
+    _, _, name, ___, block = children
+    return ("keyframes " + name, block)
+
+
+@GDef(r'keyframes_block = blk_open ___ keyframe+ blk_close')
+def keyframes_block(env, node, children):
+    return children[2]
+
+
+@GDef(r'keyframe = tag? expr ___ block ___')
+def keyframe(env, node, children):
+    tag, condition, _, block, _ = children
+    tag = tag[0] if tag else None
+    return Keyframe(
+        tag=tag,
+        condition=condition,
+        block=block)
 
 
 ### CSS RULES ###
