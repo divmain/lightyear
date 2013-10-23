@@ -74,7 +74,44 @@ class AtRuleBlock():
 
         if not inside:
             return ''
+
         return outside + "{" + inside + "}"
+
+
+class Keyframe():
+    '''
+    Represents a keyframe in a CSS animation.
+    '''
+    def __init__(self, tag, condition, block):
+        self.tag = tag
+        self.condition = condition
+        self.block = block
+
+    def css(self, tag=None):
+        '''
+        Return CSS representation.
+        '''
+        if not len(self.block):
+            return ''
+        if self.tag and not tag == self.tag:
+            return ''
+        outside = self.condition
+
+        if self.tag:
+            inside = ''.join(
+                e.css() if hasattr(e, 'css')
+                else '{} {}'.format(type(e), repr(e))
+                for e in self.block)
+        else:
+            inside = ''.join(
+                e.css(tag=tag) if hasattr(e, 'css')
+                else '{} {}'.format(type(e), repr(e))
+                for e in self.block)
+
+        if not inside:
+            return ''
+
+        return str(outside) + "{" + inside + "}"
 
 
 class CSSRule():
