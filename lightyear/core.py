@@ -4,7 +4,7 @@ from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
-from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentSelector
+from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
 
 ly_grammar = ""
 funcmap = {}
@@ -80,7 +80,7 @@ class LY(object):
 
     def flatten(self):
         '''
-        Flatten all nested rules and convert parent selectors
+        Flatten all nested rules and convert parent references
         to standard selectors.  Execute only after LightYear
         code evaluation.
         '''
@@ -94,7 +94,7 @@ class LY(object):
                         element.block[j] = IgnoreMe()
 
                     # Find parent selectors and convert to standard RuleBlocks.
-                    elif isinstance(child_element, ParentSelector):
+                    elif isinstance(child_element, ParentReference):
                         ps_rule_block = child_element.rule_block
                         if len(ps_rule_block.selectors) > 1:
                             new_selectors = (

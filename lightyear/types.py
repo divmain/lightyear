@@ -154,12 +154,12 @@ class CSSRule():
             debug=debug_comment)
 
 
-class ParentSelector():
+class ParentReference():
     '''
     LightYear rule blocks that start with a reference to their parent.
     Example:
     p
-        &:hover   <---   ParentSelector will be used here.
+        &:hover   <---   ParentReference will be used here.
     '''
     def __init__(self, rule_block):
         self.rule_block = rule_block

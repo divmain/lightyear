@@ -4,7 +4,7 @@ getcontext().prec = 6
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
 from .types import (RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock,
-                    Distance, ParentSelector, Color, AtRuleBlock, Keyframe)
+                    Distance, ParentReference, Color, AtRuleBlock, Keyframe)
 from .core import GDef
 from .functions import builtin_funcs
 from .errors import UnknownMixinOrFunc
@@ -42,14 +42,14 @@ def block(env, node, children):
     return children[2]
 
 
-@GDef(r'block_element = (mixin_or_func_call / declaration / rule_block / parent_selector) ___')
+@GDef(r'block_element = (mixin_or_func_call / declaration / rule_block / parent_reference) ___')
 def block_element(env, node, children):
     return children[0][0]
 
 
-@GDef(r'parent_selector = "&" rule_block')
-def parent_selector(env, node, children):
-    return ParentSelector(children[1])
+@GDef(r'parent_reference = "&" rule_block')
+def parent_reference(env, node, children):
+    return ParentReference(children[1])
 
 
 @GDef(r'simple_selector = ((type_sel / universal_sel) (attribute_sel / id_class_sel / pseudo_class)*) / (attribute_sel / id_class_sel)')
