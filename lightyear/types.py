@@ -11,12 +11,13 @@ class RuleBlock():
     Represents a series of CSS selectors and any children objects, including
     nested RuleBlocks and CSS property/value declarations.
     '''
-    def __init__(self, tag, selectors, block):
+    def __init__(self, tag, selectors, block, index):
         self.tag = tag
         self.selectors = selectors
         self.block = block
+        self.index = index
 
-    def css(self, tag=None):
+    def css(self, tag=None, debug=False):
         '''
         Return valid CSS for self and nested property/value declarations.
         '''
@@ -28,30 +29,35 @@ class RuleBlock():
 
         if self.tag:
             inside = ''.join(
-                e.css() if hasattr(e, 'css')
+                e.css(debug=debug) if hasattr(e, 'css')
                 else '{} {}'.format(type(e), repr(e))
                 for e in self.block)
         else:
             inside = ''.join(
-                e.css(tag=tag) if hasattr(e, 'css')
+                e.css(tag=tag, debug=debug) if hasattr(e, 'css')
                 else '{} {}'.format(type(e), repr(e))
                 for e in self.block)
 
         if not inside:
             return ''
-        return outside + "{" + inside + "}"
+
+        debug_comment = debug.line_number_comment(self.index) if debug else ''
+        return '{0}{1}{{{2}}}'.format(outside,
+                                      debug_comment,
+                                      inside)
 
 
 class AtRuleBlock():
     '''
     Represents a CSS at-rule and any children objects.
     '''
-    def __init__(self, tag, text, block):
+    def __init__(self, tag, text, block, index):
         self.tag = tag
         self.text = text
         self.block = block
+        self.index = index
 
-    def css(self, tag=None):
+    def css(self, tag=None, debug=False):
         '''
         Return valid CSS for self and nested property/value declarations.
         '''
@@ -63,30 +69,35 @@ class AtRuleBlock():
 
         if self.tag:
             inside = ''.join(
-                e.css() if hasattr(e, 'css')
+                e.css(debug=debug) if hasattr(e, 'css')
                 else '{} {}'.format(type(e), repr(e))
                 for e in self.block)
         else:
             inside = ''.join(
-                e.css(tag=tag) if hasattr(e, 'css')
+                e.css(tag=tag, debug=debug) if hasattr(e, 'css')
                 else '{} {}'.format(type(e), repr(e))
                 for e in self.block)
 
         if not inside:
             return ''
-        return outside + "{" + inside + "}"
+
+        debug_comment = debug.line_number_comment(self.index) if debug else ''
+        return '{0}{1}{{{2}}}'.format(outside,
+                                      debug_comment,
+                                      inside)
 
 
 class Keyframe():
     '''
     Represents a keyframe in a CSS animation.
     '''
-    def __init__(self, tag, condition, block):
+    def __init__(self, tag, condition, block, index):
         self.tag = tag
         self.condition = condition
         self.block = block
+        self.index = index
 
-    def css(self, tag=None):
+    def css(self, tag=None, debug=False):
         '''
         Return CSS representation.
         '''
@@ -98,31 +109,36 @@ class Keyframe():
 
         if self.tag:
             inside = ''.join(
-                e.css() if hasattr(e, 'css')
+                e.css(debug=debug) if hasattr(e, 'css')
                 else '{} {}'.format(type(e), repr(e))
                 for e in self.block)
         else:
             inside = ''.join(
-                e.css(tag=tag) if hasattr(e, 'css')
+                e.css(tag=tag, debug=debug) if hasattr(e, 'css')
                 else '{} {}'.format(type(e), repr(e))
                 for e in self.block)
 
         if not inside:
             return ''
 
-        return str(outside) + "{" + inside + "}"
+        debug_comment = debug.line_number_comment(self.index) if debug else ''
+        return '{outside}{debug}{{{inside}}}'.format(
+            outside=outside,
+            debug=debug_comment,
+            inside=inside)
 
 
 class CSSRule():
     '''
     Represents CSS property/value declarations.
     '''
-    def __init__(self, tag, prop, values):
+    def __init__(self, tag, prop, values, index):
         self.tag = tag
         self.prop = prop
         self.values = values
+        self.index = index
 
-    def css(self, tag=None):
+    def css(self, tag=None, debug=False):
         '''
         Return valid CSS for self.
         '''
@@ -130,7 +146,12 @@ class CSSRule():
             return ''
         if self.tag and not tag:
             return ''
-        return self.prop + ":" + " ".join(str(x) for x in self.values) + ";"
+
+        debug_comment = debug.line_number_comment(self.index) if debug else ''
+        return '{property}:{values};{debug}'.format(
+            property=self.prop,
+            values=' '.join(str(x) for x in self.values),
+            debug=debug_comment)
 
 
 class ParentSelector():
@@ -161,7 +182,7 @@ class UnpackMe(list):
     Contains results of mixin calls that need to be incorporated into their
     parent RuleBlocks.
     '''
-    def css(self, tag=None):
+    def css(self, tag=None, debug=False):
         return ''
 
 
@@ -179,7 +200,7 @@ class IgnoreMe():
     To replace RuleBlocks or other objects that should not be evaluated when
     producing CSS.
     '''
-    def css(self, tag=None):
+    def css(self, tag=None, debug=False):
         return ''
 
 

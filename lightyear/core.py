@@ -43,10 +43,11 @@ class LY(object):
     '''
     grammar = None
 
-    def __init__(self, env=None):
+    def __init__(self, env=None, debug=False):
         if not self.grammar:
             self.__class__.grammar = Grammar(ly_grammar)['ltree']
         self.env = env or {}
+        self.debug = debug
 
     def eval(self, ly_code):
         '''
@@ -54,6 +55,8 @@ class LY(object):
         evaluate the root node.
         '''
         ly_code = '\n'.join(tokenize_whitespace(ly_code))
+        self.debug = DebugGenerator(ly_code) if self.debug else False
+
         node = self.grammar.parse(ly_code)
         self.ltree = self._evalnode(node)
         self.flatten()
@@ -92,7 +95,10 @@ class LY(object):
             output += root_block.prefix
             if root_block.prefix:
                 output += '{'
-            output += ''.join(e.css(tag=root_block.tag_name) if hasattr(e, 'css') else '' for e in self.ltree)
+            output += ''.join(e.css(tag=root_block.tag_name, debug=self.debug)
+                              if hasattr(e, 'css')
+                              else ''
+                              for e in self.ltree)
             if root_block.prefix:
                 output += '}'
 
@@ -130,7 +136,8 @@ class LY(object):
                         new_block = RuleBlock(
                             tag=ps_rule_block.tag,
                             selectors=new_selectors,
-                            block=ps_rule_block.block)
+                            block=ps_rule_block.block,
+                            index=ps_rule_block.index)
                         self.ltree.insert(i+1, new_block)
 
                         element.block[j] = IgnoreMe()
@@ -221,3 +228,19 @@ def _isquoted(line, pos):
                 SQUO = False
 
     return (DQUO or SQUO)
+
+
+### DEBUG ###
+
+class DebugGenerator():
+    def __init__(self, ly_code):
+        self.ly_code = ly_code
+
+    def line_number(self, index):
+        return self.ly_code[:index].count('\n') + 1
+
+    def line_number_comment(self, index):
+        return '/*line{}*/'.format(self.line_number(index))
+
+    def __nonzero__(self):
+        return True

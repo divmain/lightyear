@@ -33,7 +33,8 @@ def rule_block(env, node, children):
 
     return RuleBlock(tag=tag,
                      selectors=selectors,
-                     block=block)
+                     block=block,
+                     index=node.start)
 
 
 @GDef(r'block = blk_open ___ block_element+ blk_close')
@@ -80,7 +81,8 @@ def at_rule(env, node, children):
 
     return AtRuleBlock(tag=tag,
                        text=text.strip(),
-                       block=block)
+                       block=block,
+                       index=node.start)
 
 
 @GDef(r'at_rule_normal = any ___ block')
@@ -107,7 +109,8 @@ def keyframe(env, node, children):
     return Keyframe(
         tag=tag,
         condition=condition,
-        block=block)
+        block=block,
+        index=node.start)
 
 
 ### CSS RULES ###
@@ -118,7 +121,8 @@ def declaration(env, node, children):
     tag = tag[0] if tag else None
     return CSSRule(tag=tag,
                    prop=prop,
-                   values=values)
+                   values=values,
+                   index=node.start)
 
 
 @GDef(r'property = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
