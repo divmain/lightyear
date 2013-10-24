@@ -340,6 +340,8 @@ class DebugGenerator():
         return self.ly_code[:index].count('\n') + 1
 
     def line_number_comment(self, index):
+        if index == 'generated':
+            return '/*GENERATED*/'
         return '/*line{}*/'.format(self.line_number(index))
 
     def __nonzero__(self):
