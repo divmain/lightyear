@@ -159,7 +159,7 @@ def test_parent_selector_c():
                 &:hover
                     background-color: yellow
         ''')
-    o = 'p a:hoverfirst{background-color:yellow;}'
+    o = 'p a:hover{background-color:yellow;}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o

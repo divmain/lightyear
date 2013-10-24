@@ -47,11 +47,6 @@ def block_element(env, node, children):
     return children[0][0]
 
 
-@GDef(r'parent_reference = "&" rule_block')
-def parent_reference(env, node, children):
-    return ParentReference(children[1])
-
-
 @GDef(r'simple_selector = ((type_sel / universal_sel) (attribute_sel / id_class_sel / pseudo_class)*) / (attribute_sel / id_class_sel)')
 def simple_selector(env, node, children):
     return node.text
@@ -70,6 +65,28 @@ pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-c
 ''')
 def selector_misc(env, node, children):
     return node.text
+
+
+### PARENT REFERENCE ###
+
+@GDef(r'parent_reference = "&" parent_block')
+def parent_reference(env, node, children):
+    return ParentReference(children[1])
+
+
+@GDef(r'parent_block = tag? (simple_selector / pseudo_class) ("," _ (simple_selector / pseudo_class))* ___ block')
+def parent_block(env, node, children):
+    tag, (simple_sel, ), more_selectors, _, block = children
+    tag = tag[0] if tag else None
+
+    selectors = [simple_sel]
+    if more_selectors:
+        selectors = selectors.extend([selector for _, (selector, ) in more_selectors])
+
+    return RuleBlock(tag=tag,
+                     selectors=selectors,
+                     block=block,
+                     index=node.start)
 
 
 ### AT-RULES ###
