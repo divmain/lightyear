@@ -20,7 +20,7 @@ fcolor_light     = #ffffff
 fcolor_dark      = #000000
 fcolor_active    = #eb7f13
 
-bcolor_aqua     = darken(#0da0b0, 10%)
+bcolor_aqua     = darken(#0da0b0 10%)
 bcolor_offwhite = #f0f0f0
 bcolor_lgrey    = #dddddd
 bcolor_dgrey    = #181818
@@ -69,8 +69,8 @@ body
     top: 80px
 
     > section
-            padding: 40px 16px
-            line-height: 1.4em
+        padding: 40px 16px
+        line-height: 1.4em
 
         .main
             (d) col(13)
@@ -507,7 +507,7 @@ footer
             .title, .bar
                 background: cvig_three
             a
-                color: darken(cvig_three, 40%)
+                color: darken(cvig_three 40%)
         &#four
             .title, .bar
                 background: cvig_four
