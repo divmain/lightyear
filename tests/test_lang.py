@@ -152,6 +152,19 @@ def test_parent_selector_b():
     assert ly.css() == o
 
 
+def test_parent_selector_c():
+    i = dedent('''
+        p
+            a
+                &:hover
+                    background-color: yellow
+        ''')
+    o = 'p a:hoverfirst{background-color:yellow;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 def test_multiple_scopes():
     i = dedent('''
         p
