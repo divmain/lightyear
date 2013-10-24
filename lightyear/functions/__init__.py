@@ -12,3 +12,4 @@ def bifunc(f):
 
 from . import colors
 from . import functional_notation
+from . import grid
