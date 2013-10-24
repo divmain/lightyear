@@ -6,7 +6,7 @@ from ..types import Color, Distance
 
 
 @bifunc
-def darken(color, amount):
+def darken(env, color, amount):
     if not isinstance(color, Color):
         raise ValueError('Cannot darken non-color:', str(color))
 
@@ -39,7 +39,7 @@ def darken(color, amount):
 
 
 @bifunc
-def lighten(color, amount):
+def lighten(env, color, amount):
     if not isinstance(color, Color):
         raise ValueError('Cannot lighten non-color:', str(color))
 
@@ -67,6 +67,5 @@ def lighten(color, amount):
             Decimal(255*c) if c <= 255 else Decimal(255)
             for c in hls_to_rgb(h, new_l, s))
         return color
-
 
     raise ValueError('Cannot lighten by value:', str(amount))

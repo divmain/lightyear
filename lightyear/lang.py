@@ -186,7 +186,7 @@ def mixin_or_func_call(env, node, children):
     args = [arg for _, arg, _ in args]
 
     if name in builtin_funcs:
-        return builtin_funcs[name](*args)
+        return builtin_funcs[name](env, *args)
     elif name in env:
         return UnpackMe(env[name](*args))
 

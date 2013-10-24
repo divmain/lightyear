@@ -9,44 +9,44 @@ from ..types import Color
 ### SYNTAX
 
 @bifunc
-def url(text):
+def url(env, text):
     return 'url({})'.format(text)
 
 
 @bifunc
-def toggle(text):
+def toggle(env, text):
     return 'toggle({})'.format(text)
 
 
 ### VALUES AND UNITS ###
 
 @bifunc
-def calc(*args):
+def calc(env, *args):
     return 'calc({})'.format(''.join(str(arg) for arg in args))
 
 
 @bifunc
-def attr(text):
+def attr(env, text):
     return 'attr({})'.format(text)
 
 
 ### COLORS
 
 @bifunc
-def rgb(red, green, blue):
+def rgb(env, red, green, blue):
     return Color((red, green, blue), ctype='rgb')
 
 
 @bifunc
-def rgba(red, green, blue, alpha):
+def rgba(env, red, green, blue, alpha):
     return Color((red, green, blue, alpha), ctype='rgba')
 
 
 @bifunc
-def hsl(hue, saturation, lightness):
+def hsl(env, hue, saturation, lightness):
     return Color((hue, saturation, lightness), ctype='hsl')
 
 
 @bifunc
-def hsla(hue, saturation, lightness, alpha):
+def hsla(env, hue, saturation, lightness, alpha):
     return Color((hue, saturation, lightness, alpha), ctype='hsla')
