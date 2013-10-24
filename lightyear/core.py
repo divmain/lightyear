@@ -5,7 +5,7 @@ from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
-from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference, AtRuleBlock
+from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
 
 ly_grammar = ""
 funcmap = {}
@@ -126,9 +126,9 @@ class LY(object):
         ltree_reduced = OrderedDict()
         non_block_count = 0
         for element in self.ltree:
-            if isinstance(element, RuleBlock):
+            if hasattr(element, 'selectors'):
                 hash_ = repr(element.selectors)
-            elif isinstance(element, AtRuleBlock):
+            elif hasattr(element, 'text'):
                 hash_ = element.text
             else:
                 hash_ = non_block_count
