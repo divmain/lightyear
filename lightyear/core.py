@@ -1,10 +1,11 @@
 import re
+from collections import OrderedDict
 
 from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
-from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
+from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference, AtRuleBlock
 
 ly_grammar = ""
 funcmap = {}
@@ -115,6 +116,49 @@ class LY(object):
                         self.ltree.insert(i+1, new_block)
 
                         element.block[j] = IgnoreMe()
+
+    def reduce(self):
+        '''
+        Consolidate rules with identical selectors into single rules.
+        '''
+
+        # Reduce blocks.
+        ltree_reduced = OrderedDict()
+        non_block_count = 0
+        for element in self.ltree:
+            if isinstance(element, RuleBlock):
+                hash_ = repr(element.selectors)
+            elif isinstance(element, AtRuleBlock):
+                hash_ = element.text
+            else:
+                hash_ = non_block_count
+                non_block_count += 1
+
+            if hasattr(element, 'block'):
+                if hash_ in ltree_reduced:
+                    ltree_reduced[hash_].block += element.block
+                else:
+                    ltree_reduced[hash_] = element
+
+            else:
+                ltree_reduced[hash_] = element
+
+        ltree_reduced = [ltree_reduced[k] for k in ltree_reduced]
+
+        # Reduce properties.
+        for element in ltree_reduced:
+            non_property_count = 0
+            if hasattr(element, 'block'):
+                block_reduced = OrderedDict()
+                for child in element.block:
+                    if hasattr(child, 'prop'):
+                        block_reduced[child.prop] = child
+                    else:
+                        block_reduced[non_property_count] = child
+                        non_property_count += 1
+                element.block = [block_reduced[k] for k in block_reduced]
+
+        self.ltree = ltree_reduced
 
     def css(self):
         '''

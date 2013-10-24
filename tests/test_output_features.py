@@ -119,7 +119,7 @@ def test_reduce_b():
         ''')
     o = ('body{color:blue;background-color:white;}'
          'body p{background-color:red;}'
-         'body p:hover{background-color:green}')
+         'body p:hover{background-color:green;}')
     ly = LY()
     ly.eval(i)
     ly.reduce()
