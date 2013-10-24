@@ -1,15 +1,19 @@
-///////////////////////////
-///     DEFINE GRID     ///
-///////////////////////////
+////////////////////////////
+///    CONFIGURE GRID    ///
+////////////////////////////
 
-(grid)
-    A
-        columns: 16
-        column-width: 60px
-        gutter-width: 32px
-        
-    B
-        gutter-width: 64px
+// Configure primary grid with 16 columns.
+grid-columns = 16
+grid-column-width = 60px
+grid-gutter = 32px
+
+// Configure nested grid
+//  - assumes space of 8 columns of parent grid.
+//  - configures 3 inner columns
+//  - configured gutter of 64px for inner columns
+ngrid-1-ocolumns = 8
+ngrid-1-icolumns = 4
+ngrid-1-gutter = 64px
 
 
 ////////////////////////////
@@ -76,15 +80,15 @@ body
             (d) col(13)
 
             (d) .item
-                col(9)
+                ncol(1 9)
                 margin-bottom: 24px
 
             aside
                 width: 100%
-                (d) col(4)
+                (d) ncol(1 4)
 
         (d) h2
-            col(3)
+            ncol(1 3)
 
 header
     nav
