@@ -47,7 +47,7 @@ def block_element(env, node, children):
     return children[0][0]
 
 
-@GDef(r'simple_selector = ((type_sel / universal_sel) (attribute_sel / id_class_sel / pseudo_class)*) / (attribute_sel / id_class_sel)')
+@GDef(r'simple_selector = selector_with_space? (((type_sel / universal_sel) (attribute_sel / id_class_sel / pseudo_class)*) / (attribute_sel / id_class_sel))')
 def simple_selector(env, node, children):
     return node.text
 
@@ -65,6 +65,12 @@ pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-c
 ''')
 def selector_misc(env, node, children):
     return node.text
+
+
+@GDef(r'selector_with_space = _? (">" / "+" / "~") _?')
+def selector_with_space(env, node, children):
+    'Support immediate child, immediate sibling, and general sibling selectors.'
+    return node.text.strip()
 
 
 ### PARENT REFERENCE ###
