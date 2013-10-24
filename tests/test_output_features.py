@@ -138,7 +138,7 @@ def test_lcd_a():
         ''')
     o = 'a{color:blue;}p{color:red;}'
     ly = LY()
-    ly.eval()
+    ly.eval(i)
     ly.lcd()
     assert ly.css() == o
 
@@ -154,7 +154,7 @@ def test_lcd_b():
         ''')
     o = 'a{color:blue;}p{color:red;}'
     ly = LY()
-    ly.eval()
+    ly.eval(i)
     ly.lcd()
     assert ly.css() == o
 
@@ -169,6 +169,6 @@ def test_lcd_c():
         ''')
     o = 'body a{color:blue;}a{text-decoration:none;}'
     ly = LY()
-    ly.eval()
+    ly.eval(i)
     ly.lcd()
     assert ly.css() == o
