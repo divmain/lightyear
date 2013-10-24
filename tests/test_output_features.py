@@ -85,3 +85,42 @@ def test_pretty_at_rule():
     ly = LY()
     ly.eval(i)
     assert ly.pretty_css() == o
+
+
+### REDUCE ###
+
+def test_reduce_a():
+    i = dedent('''
+        body
+            color: black
+        body
+            color: white
+        ''')
+    o = 'body{color:white;}'
+    ly = LY()
+    ly.eval(i)
+    ly.reduce()
+    assert ly.css() == o
+
+
+def test_reduce_b():
+    i = dedent('''
+        body
+            color: black
+            background-color: white
+            p
+                background-color: white
+                &:hover
+                    background-color: green
+        body
+            color: blue
+            p
+                background-color: red
+        ''')
+    o = ('body{color:blue;background-color:white;}'
+         'body p{background-color:red;}'
+         'body p:hover{background-color:green}')
+    ly = LY()
+    ly.eval(i)
+    ly.reduce()
+    assert ly.css() == o
