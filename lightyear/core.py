@@ -78,32 +78,6 @@ class LY(object):
 
         return fn(self.env, node, children)
 
-    def css(self):
-        '''
-        Output minified CSS.  Should not be run until LightYear code is
-        evaluated and the resulting structure flattened.
-        '''
-        root_blocks = []
-        for e in self.ltree:
-            if isinstance(e, RootBlock):
-                root_blocks.append(e)
-        if not root_blocks:
-            root_blocks.append(RootBlock(tag_name=None, prefix=''))
-
-        output = ''
-        for root_block in root_blocks:
-            output += root_block.prefix
-            if root_block.prefix:
-                output += '{'
-            output += ''.join(e.css(tag=root_block.tag_name, debug=self.debug)
-                              if hasattr(e, 'css')
-                              else ''
-                              for e in self.ltree)
-            if root_block.prefix:
-                output += '}'
-
-        return output
-
     def flatten(self):
         '''
         Flatten all nested rules and convert parent selectors
@@ -141,6 +115,84 @@ class LY(object):
                         self.ltree.insert(i+1, new_block)
 
                         element.block[j] = IgnoreMe()
+
+    def css(self):
+        '''
+        Output minified CSS.  Should not be run until LightYear code is
+        evaluated and the resulting structure flattened.
+        '''
+        root_blocks = []
+        for e in self.ltree:
+            if isinstance(e, RootBlock):
+                root_blocks.append(e)
+        if not root_blocks:
+            root_blocks.append(RootBlock(tag_name=None, prefix=''))
+
+        output = ''
+        for root_block in root_blocks:
+            output += root_block.prefix
+            if root_block.prefix:
+                output += '{'
+            output += ''.join(e.css(tag=root_block.tag_name, debug=self.debug)
+                              if hasattr(e, 'css')
+                              else ''
+                              for e in self.ltree)
+            if root_block.prefix:
+                output += '}'
+
+        return output
+
+    def pretty_css(self):
+        '''
+        Output prettified CSS.
+        '''
+        css_chars = list(self.css())
+
+        # Insert spaces and newlines.
+        skip = False
+        for i, c in enumerate(css_chars):
+            this_two = ''.join(css_chars[i:i+2]) if len(css_chars) > i+1 else None
+            next_two = ''.join(css_chars[i+1:i+3]) if len(css_chars) > i+2 else None
+            third = css_chars[i+2] if len(css_chars) > i+2 else None
+
+            if c == ';' and not next_two == '/*':
+                css_chars.insert(i+1, '\n')
+            elif this_two == '/*':
+                if skip:
+                    skip = False
+                    continue
+                css_chars.insert(i, ' ')
+                skip = True
+            elif c == ':':
+                css_chars.insert(i+1, ' ')
+            elif c == '{':
+                if skip:
+                    skip = False
+                    continue
+                css_chars.insert(i+1, '\n')
+                css_chars.insert(i, ' ')
+                skip = True
+            elif c == '}':
+                css_chars.insert(i+1, '\n')
+            elif this_two == '*/' and not third == '{':
+                css_chars.insert(i+2, '\n')
+
+        # Insert Indentation
+        dent = 0
+        tab = '    '
+        for i, c in enumerate(css_chars):
+            next = css_chars[i+1] if len(css_chars) > i+1 else None
+            prev = css_chars[i-1] if not i == 0 else None
+
+            if c == '{':
+                dent += 1
+            elif c == '}':
+                dent -= 1
+
+            elif c == '\n' and not next == '}' and not prev == '}':
+                css_chars.insert(i+1, tab)
+
+        return ''.join(css_chars)
 
 
 # Import LightYear grammar after LY class definition.
