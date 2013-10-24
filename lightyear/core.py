@@ -4,7 +4,7 @@ from collections import OrderedDict
 from parsimonious.grammar import Grammar
 
 from .errors import IndentationError
-from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_DELIM
+from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_OPEN, COMMENT_CLOSE
 from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
 
 ly_grammar = ""
@@ -44,18 +44,23 @@ class LY(object):
     '''
     grammar = None
 
-    def __init__(self, env=None, debug=False):
+    def __init__(self, env=None, debug=False, path=None):
         if not self.grammar:
             self.__class__.grammar = Grammar(ly_grammar)['ltree']
         self.env = env or {}
         self.debug = debug
+        self.path = path
 
     def eval(self, ly_code):
         '''
         Accept a string containing LightYear code as input, and recursively
         evaluate the root node.
         '''
-        ly_code = '\n'.join(tokenize_whitespace(ly_code))
+        lines = ly_code.split('\n')
+        lines = tokenize_whitespace(lines)
+        lines = tokenize_comments(lines)
+        ly_code = '\n'.join(lines)
+
         self.debug = DebugGenerator(ly_code) if self.debug else False
 
         node = self.grammar.parse(ly_code)
@@ -246,7 +251,7 @@ from . import lang
 
 ### PRE-PEG TOKENIZATION ###
 
-def tokenize_whitespace(text):
+def tokenize_whitespace(lines):
     """
     For each line, indentify current level of indendation and compare
     against indentation of previous line.  Insert BLK_OPEN or BLK_CLOSE
@@ -255,8 +260,6 @@ def tokenize_whitespace(text):
 
     firstline = True
     prevdent = 0
-
-    lines = text.split('\n')
 
     for line in lines:
         line = line.expandtabs(INDENT_SIZE)
@@ -298,7 +301,7 @@ def tokenize_comments(lines):
     for line in lines:
         for possible in (x.start(0) for x in re.finditer('//', line)):
             if not _isquoted(line, possible):
-                line = line[:possible] + COMMENT_DELIM + line[possible:] + COMMENT_DELIM
+                line = line[:possible] + COMMENT_OPEN + line[possible:] + COMMENT_CLOSE
                 break
         yield line
 

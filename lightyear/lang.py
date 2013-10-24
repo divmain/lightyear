@@ -2,7 +2,7 @@ import operator as op
 from decimal import Decimal, getcontext
 getcontext().prec = 6
 
-from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_DELIM
+from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_OPEN, COMMENT_CLOSE
 from .types import (RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock,
                     Distance, ParentReference, Color, AtRuleBlock, Keyframe)
 from .core import GDef
@@ -336,9 +336,10 @@ ___ = ~"[\s]*" (comment ~"[\s]*")*
 _ = ~"[ \t]+"
 blk_open = "{blk_open}"
 blk_close = "{blk_close}"
-comment = ~"{comment_delim}[^{comment_delim}]*{comment_delim}"
+comment = ~"{comment_open}.*(?!{comment_close})"
 '''.format(
-    comment_delim=COMMENT_DELIM,
+    comment_open=COMMENT_OPEN,
+    comment_close=COMMENT_CLOSE,
     blk_open=BLK_OPEN,
     blk_close=BLK_CLOSE)
 )
