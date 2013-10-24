@@ -64,3 +64,24 @@ def test_pretty_css_debug():
     ly = LY(debug=True)
     ly.eval(i)
     assert ly.pretty_css() == o
+
+
+def test_pretty_at_rule():
+    i = dedent('''
+        body
+            color: black
+        @media screen and (min-width:970px)
+            body
+                color: white
+        ''')
+    o = ('body {\n'
+         '    color: black;\n'
+         '}\n'
+         '@media screen and (min-width: 970px) {\n'
+         '    body {\n'
+         '        color: white;\n'
+         '    }\n'
+         '}\n')
+    ly = LY()
+    ly.eval(i)
+    assert ly.pretty_css() == o

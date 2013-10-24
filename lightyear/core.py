@@ -182,15 +182,16 @@ class LY(object):
         tab = '    '
         for i, c in enumerate(css_chars):
             next = css_chars[i+1] if len(css_chars) > i+1 else None
-            prev = css_chars[i-1] if not i == 0 else None
 
+            if next == '}':
+                dent -= 1
             if c == '{':
                 dent += 1
-            elif c == '}':
-                dent -= 1
 
-            elif c == '\n' and not next == '}' and not prev == '}':
-                css_chars.insert(i+1, tab)
+            elif c == '\n':
+                css_chars.insert(i+1, tab*dent)
+                if next == '}':
+                    dent += 1
 
         return ''.join(css_chars)
 
