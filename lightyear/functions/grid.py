@@ -48,5 +48,36 @@ def col(env, number):
 
 
 @bifunc
-def ncol(env, level, number):
+def ncol(env, grid_id, number):
+    '''
+    Return CSS rules for a nested column in grid_id of size number.
+    '''
+    try:
+        pass
+
+    except KeyError:
+        raise LyError('Grid is not properly configured.')
+
     pass
+
+
+def grid_width(env, grid_id):
+    '''
+    Return total grid width for grid with id grid_id.
+    '''
+    try:
+        parent_id = env['ngrid-{}-parent'.format(grid_id)]
+        if parent_id == 0:
+            num_parent_consumed = env['ngrid-{}-ocolumns'.format(grid_id)]
+            parent_column_width = env['grid-column-width']
+            parent_gutter = env['grid-gutter']
+            return parent_column_width * num_parent_consumed - parent_gutter
+
+        parent_width = grid_width(env, parent_id)
+        parent_gutter = env['ngrid-{}-gutter'.format(parent_id)]
+        num_parent_columns = env['ngrid-{}-icolumns'.format(parent_id)]
+        num_parent_consumed = env['ngrid-{}-ocolumns'.format(grid_id)]
+        return (parent_width / num_parent_columns) * num_parent_consumed - parent_gutter
+
+    except KeyError:
+        raise LyError('Grid is not properly configured.')
