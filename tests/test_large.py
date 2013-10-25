@@ -39,7 +39,6 @@ def test_large_a():
          'body > section h2{display:inline-block;width:100px;}')
     ly = LY()
     ly.eval(i)
-    print(ly.css())
     assert ly.css() == o
 
 
