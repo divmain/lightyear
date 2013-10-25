@@ -225,6 +225,11 @@ class LY(object):
                 css_chars.insert(i+1, '\n')
             elif this_two == '*/' and not third == '{':
                 css_chars.insert(i+2, '\n')
+            elif c == ',':
+                if not css_chars[i+1] == ' ':
+                    css_chars[i] = ', '
+                if css_chars[i-1] == ' ':
+                    css_chars[i-1] = ''
 
         # Insert Indentation
         dent = 0
