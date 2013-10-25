@@ -317,7 +317,7 @@ class Color():
 
     @property
     def rgba(self):
-        return 'rgba({r},{g},{b},{a}'.format(
+        return 'rgba({r},{g},{b},{a})'.format(
             r=self._r,
             g=self._g,
             b=self._b,
