@@ -195,6 +195,18 @@ class LY(object):
         '''
         Output prettified CSS.
         '''
+        def inside(index, chars):
+            j = index
+            try:
+                while True:
+                    j += 1
+                    if chars[j] == '}' or chars[j] == ';':
+                        return True
+                    elif chars[j] == '{':
+                        return False
+            except IndexError:
+                return False
+
         css_chars = list(self.css())
 
         # Insert spaces and newlines.
@@ -212,7 +224,7 @@ class LY(object):
                     continue
                 css_chars.insert(i, ' ')
                 skip = True
-            elif c == ':':
+            elif c == ':' and inside(i, css_chars):
                 css_chars.insert(i+1, ' ')
             elif c == '{':
                 if skip:
