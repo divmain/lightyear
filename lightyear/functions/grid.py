@@ -137,7 +137,7 @@ def clearfix(env):
 
     before_block = RuleBlock(
         tag=None,
-        selectors = [':before'],
+        selectors=[':before'],
         block=[
             CSSRule(
                 tag=None,
@@ -154,7 +154,7 @@ def clearfix(env):
         )
     after_block = RuleBlock(
         tag=None,
-        selectors = [':before'],
+        selectors=[':after'],
         block=[
             CSSRule(
                 tag=None,
