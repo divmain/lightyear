@@ -148,7 +148,7 @@ def declaration(env, node, children):
                    index=node.start)
 
 
-@GDef(r'property = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
+@GDef(r'property = ~"[a-zA-Z\_\-][a-zA-Z0-9\-\_]*"')
 def property_(env, node, children):
     return node.text
 
@@ -202,9 +202,7 @@ def mixin_or_func_call(env, node, children):
     return return_val
 
 
-
-
-@GDef(r'lvalue = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
+@GDef(r'lvalue = ~"[a-zA-Z\_\-][a-zA-Z0-9\-\_]*"')
 def lvalue(env, node, children):
     if node.text in env:
         return env[node.text]
@@ -338,7 +336,7 @@ def tag(env, node, children):
     return children[1]
 
 
-@GDef(r'name = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
+@GDef(r'name = ~"[a-zA-Z\_\-][a-zA-Z0-9\-\_]*"')
 def name(env, node, children):
     return node.text
 
