@@ -102,6 +102,8 @@ class LY(object):
                     # Find parent selectors and convert to standard RuleBlocks.
                     elif isinstance(child_element, ParentReference):
                         ps_rule_block = child_element.rule_block
+                        if not ps_rule_block.tag:
+                            ps_rule_block.tag = element.tag
                         if len(ps_rule_block.selectors) > 1:
                             new_selectors = (
                                 child_element.selectors[:-1] +
