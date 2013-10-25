@@ -6,7 +6,7 @@ from . import bifunc
 from ..types import Color
 
 
-### SYNTAX
+### SYNTAX ###
 
 @bifunc
 def url(env, text):
@@ -30,7 +30,7 @@ def attr(env, text):
     return 'attr({})'.format(text)
 
 
-### COLORS
+### COLORS ###
 
 @bifunc
 def rgb(env, red, green, blue):
@@ -50,3 +50,17 @@ def hsl(env, hue, saturation, lightness):
 @bifunc
 def hsla(env, hue, saturation, lightness, alpha):
     return Color((hue, saturation, lightness, alpha), ctype='hsla')
+
+
+### CSS3 ###
+
+@bifunc
+def scale(env, x, y):
+    return 'scale({x},{y})'.format(x=x, y=y)
+
+
+### FONT-FACE ###
+
+@bifunc
+def format(env, text):
+    return 'format("{}")'.format(text)
