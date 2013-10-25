@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from . import bifunc
-from ..types import UnpackMe, CSSRule
+from ..types import UnpackMe, CSSRule, RuleBlock, ParentReference
 from ..errors import LyError
 
 
@@ -115,3 +115,74 @@ def grid_width(env, grid_id):
 
     except KeyError as e:
         raise LyError('Grid is not properly configured. Cannot find: {}'.format(e))
+
+
+### CLEARFIX ###
+
+@bifunc
+def clearfix(env):
+    '''
+    Return declarations for CSS clearfix:  Renders as:
+
+    zoom: 1
+    &:before
+        content: ""
+        display: table
+    &:after
+        content: ""
+        display: table
+        clear: both
+    '''
+    # RuleBlock: tag, selectors, block, index
+
+    before_block = RuleBlock(
+        tag=None,
+        selectors = [':before'],
+        block=[
+            CSSRule(
+                tag=None,
+                prop='content',
+                values=['""'],
+                index='generated'),
+            CSSRule(
+                tag=None,
+                prop='display',
+                values=['table'],
+                index='generated'),
+            ],
+        index='generated'
+        )
+    after_block = RuleBlock(
+        tag=None,
+        selectors = [':before'],
+        block=[
+            CSSRule(
+                tag=None,
+                prop='content',
+                values=['""'],
+                index='generated'),
+            CSSRule(
+                tag=None,
+                prop='display',
+                values=['table'],
+                index='generated'),
+            CSSRule(
+                tag=None,
+                prop='clear',
+                values=['both'],
+                index='generated'),
+            ],
+        index='generated'
+        )
+
+    to_insert = [
+        CSSRule(
+            tag=None,
+            prop='zoom',
+            values='1',
+            index='generated'),
+        ParentReference(before_block),
+        ParentReference(after_block)
+        ]
+
+    return UnpackMe(to_insert)
