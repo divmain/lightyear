@@ -251,15 +251,6 @@ header nav ul li {
 #contact fieldset button::-moz-focus-inner {
     border: none;
 }
-.center:before {
-    content: "";
-    display: table;
-}
-.center:after {
-    content: "";
-    display: table;
-    clear: both;
-}
 footer {
     background: #030303;
     color: #ffffff;
@@ -571,6 +562,15 @@ footer a.dmicon-facebook, a.dmicon-linkedin {
         margin: 0 auto;
         position: relative;
         zoom: 1;
+    }
+    .center:before {
+        content: "";
+        display: table;
+    }
+    .center:after {
+        content: "";
+        display: table;
+        clear: both;
     }
 }
 @media screen and (max-width: 970px) {
