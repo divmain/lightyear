@@ -276,7 +276,7 @@ header
                 border: none
 
 (d) .center
-    width: gridwidth
+    width: 960px
     margin: 0 auto
     position: relative
     clearfix()
