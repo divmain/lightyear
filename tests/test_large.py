@@ -41,3 +41,13 @@ def test_large_a():
     ly.eval(i)
     print(ly.css())
     assert ly.css() == o
+
+
+def test_example_file():
+    with open('divmain.ly', 'r') as f:
+        i = f.read()
+    o = ''
+    ly = LY()
+    ly.eval(i)
+    print(ly.css())
+    assert ly.css() == o
