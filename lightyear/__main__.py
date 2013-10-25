@@ -59,7 +59,8 @@ def main(argv):
             save(css, os.path.join(outdir, out_name))
         else:
             print(css)
-            print(chr(0), end='')
+            if not len(files) == 1:
+                print(chr(0), end='')
 
     return True
 
