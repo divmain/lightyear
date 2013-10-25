@@ -48,5 +48,4 @@ def test_example_file():
     o = ''
     ly = LY()
     ly.eval(i)
-    print(ly.css())
-    assert ly.css() == o
+    assert ly.pretty_css() == o
