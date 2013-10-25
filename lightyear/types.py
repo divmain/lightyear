@@ -26,9 +26,13 @@ class RuleBlock():
         if self.tag and not tag == self.tag:
             return ''
         outside = ' '.join(self.selectors)
-        for i, c in enumerate(outside):
+
+        outside_chars = list()
+        for c in outside:
             if c == ',':
-                outside = outside[:i-1] + "," + outside[i+1:]
+                outside_chars.pop()
+            outside_chars.append(c)
+        outside = ''.join(outside_chars)
 
         if self.tag:
             inside = ''.join(
