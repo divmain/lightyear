@@ -6,6 +6,7 @@ builtin_funcs = {}
 def bifunc(f):
     'Decorator to build builtin_funcs dict.'
     builtin_funcs[f.__name__] = f
+    return f
 
 
 ### BUILT-IN LIGHTYEAR FUNCTIONS ###
