@@ -552,28 +552,28 @@ footer
     -webkit-font-smoothing: antialiased
 
 .dmicon-about:before
-    content: "\e000"
+    content: "'\e000'"
 
 .dmicon-resume:before
-    content: "\e001"
+    content: "'\e001'"
 
 .dmicon-work:before
-    content: "\e003"
+    content: "'\e003'"
 
 .dmicon-contact:before
-    content: "\e002"
+    content: "'\e002'"
 
 .dmicon-printer:before
-    content: "\e004"
+    content: "'\e004'"
 
 .dmicon-adobe:before
-    content: "\e005"
+    content: "'\e005'"
 
 .dmicon-facebook:before
-    content: "\e006"
+    content: "'\e006'"
 
 .dmicon-linkedin:before
-    content: "\e007"
+    content: "'\e007'"
 
 
 ////////////////////////
