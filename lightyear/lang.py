@@ -29,7 +29,7 @@ def rule_block(env, node, children):
 
     selectors = [simple_sel]
     if more_selectors:
-        selectors = selectors.extend([selector for _, selector in more_selectors])
+        selectors = selectors.extend([selector for _, _, selector in more_selectors])
 
     return RuleBlock(tag=tag,
                      selectors=selectors,
