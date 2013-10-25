@@ -100,7 +100,7 @@ header
         left: 0px
         z-index: 1000
         width: 100%
-        group()
+        clearfix()
 
         ul
             width: 100%
@@ -114,7 +114,7 @@ header
     height: 440px
     text-align: center
     background: url("/images/banner.jpg") no-repeat scroll left center
-    group()
+    clearfix()
 
     #bannerbox
         padding: 36px 0
@@ -122,7 +122,7 @@ header
         position: relative
         width: 100%
         background-color: rgba(0 0 0 0.5)
-        group()
+        clearfix()
 
     h1
         color: white
@@ -279,7 +279,7 @@ header
     width: gridwidth
     margin: 0 auto
     position: relative
-    group()
+    clearfix()
 
 
 footer
