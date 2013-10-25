@@ -138,19 +138,25 @@ def keyframe(env, node, children):
 
 ### CSS RULES ###
 
-@GDef(r'declaration = tag? property ":" _ expr+')
+@GDef(r'declaration = tag? property ":" _ expr+ important?')
 def declaration(env, node, children):
-    tag, prop, _, _, values = children
+    tag, prop, _, _, values, important = children
     tag = tag[0] if tag else None
     return CSSRule(tag=tag,
                    prop=prop,
                    values=values,
-                   index=node.start)
+                   index=node.start,
+                   important=important if important else False)
 
 
 @GDef(r'property = ~"[a-zA-Z\_\-][a-zA-Z0-9\-\_]*"')
 def property_(env, node, children):
     return node.text
+
+
+@GDef(r'important = "!important"')
+def important(env, node, children):
+    return True
 
 
 @GDef(r'expr = (mixin_or_func_call / math / color / string_val / comma) _?')

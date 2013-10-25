@@ -132,11 +132,12 @@ class CSSRule():
     '''
     Represents CSS property/value declarations.
     '''
-    def __init__(self, tag, prop, values, index):
+    def __init__(self, tag, prop, values, index, important=False):
         self.tag = tag
         self.prop = prop
         self.values = values
         self.index = index
+        self.important = important
 
     def css(self, tag=None, debug=False):
         '''
@@ -148,10 +149,11 @@ class CSSRule():
             return ''
 
         debug_comment = debug.line_number_comment(self.index) if debug else ''
-        return '{property}:{values};{debug}'.format(
+        return '{property}:{values};{debug}{important}'.format(
             property=self.prop,
             values=' '.join(str(x) for x in self.values),
-            debug=debug_comment)
+            debug=debug_comment,
+            important='!important' if self.important else '')
 
 
 class ParentReference():
