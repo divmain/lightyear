@@ -153,7 +153,7 @@ def property_(env, node, children):
     return node.text
 
 
-@GDef(r'expr = (mixin_or_func_call / math / color / string_val) _?')
+@GDef(r'expr = (mixin_or_func_call / math / color / string_val / comma) _?')
 def expr(env, node, children):
     return children[0][0]
 
@@ -344,6 +344,11 @@ def name(env, node, children):
 @GDef(r'any = ~".+"')
 def any(env, node, children):
     return node.text.strip()
+
+
+@GDef(r'comma = _? "," _?')
+def comma(env, node, children):
+    return ','
 
 
 @GDef(r'''
