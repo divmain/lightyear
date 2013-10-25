@@ -120,7 +120,7 @@ header
         margin: 124px auto 0
         position: relative
         width: 100%
-        background-color: rgba(0,0,0, 0.5)
+        background-color: rgba(0 0 0 0.5)
         group()
 
     h1
@@ -169,7 +169,7 @@ header
 
         &:hover
             .dmicon-printer
-                transform: scale(1.1, 1.1)
+                transform: scale(1.1 1.1)
 
     .dmicon-printer
         font-size: 32px
@@ -239,8 +239,8 @@ header
             (d) width: 320px
             padding: 14px 20px
             margin-bottom: 12px
-            color: rgb(238, 238, 238)
-            background: rgb(51, 51, 51)
+            color: rgb(238 238 238)
+            background: rgb(51 51 51)
             border: none
             outline: none
 
@@ -264,7 +264,7 @@ header
             font-weight: bold
             letter-spacing: 4px
             text-transform: uppercase
-            transition: background 0.25s, color 0.25s
+            transition: background 0.25s color 0.25s
             transition-timing-function: ease-in-out
 
             &:hover
@@ -321,11 +321,11 @@ footer
     padding: 24px
     transition: text-shadow 0.5s, transform 1s
     transition-timing-function: ease-out
-    -webkit-transition: text-shadow 0.5s, -webkit-transform 1s;
+    -webkit-transition: text-shadow 0.5s, -webkit-transform 1s
 
     &:hover
         text-shadow: 0 0 14px bcolor_aqua
-        transform: scale(1.1, 1.1)
+        transform: scale(1.1 1.1)
         transition: text-shadow 0.5s, transform 1s
         -webkit-transition: text-shadow 0.5s, -webkit-transform 1s
 
@@ -358,27 +358,27 @@ footer
             width: 466px //464px
             height: 82px //80.5px
             transform-origin: 232px 40.25px // center
-            background-image: url('/images/cvig/banner.svg');
+            background-image: url("/images/cvig/banner.svg")
 
             transition: transform 0.25s ease-in-out
             -webkit-transition: -webkit-transform 0.25s ease-in-out
 
             &:hover
-                transform: scale(1.02, 1.02)
+                transform: scale(1.02 1.02)
 
         #timeline
             left: 34.4px
             top: 121.6px
             width: 157px //155.9px
             height: 768px //765.7px
-            background-image: url('/images/cvig/timeline.png');
+            background-image: url("/images/cvig/timeline.png")
 
 
         .block
             .label
                 opacity: 0
-                transform: scale(0, 0)
-                -webkit-transform: scale(0, 0)
+                transform: scale(0 0)
+                -webkit-transform: scale(0 0)
                 transition: opacity 0.50s ease-in-out 0.20s
                 -webkit-transition: opacity 0.25s ease-in-out
                 z-index: 5
@@ -386,7 +386,7 @@ footer
             .box
                 cursor: hand
                 cursor: pointer
-                transform: scale(1, 1)
+                transform: scale(1 1)
                 transform-origin: 0px 0px
                 transition: transform 0.25s ease-in-out
                 -webkit-transition: -webkit-transform 0.25s ease-in-out
@@ -404,7 +404,7 @@ footer
                     top: 659.7px
                     width: 191px
                     height: 35px
-                    background-image: url('/images/cvig/label-one.png');
+                    background-image: url("/images/cvig/label-one.png")
 
             &#two
                 .box
@@ -419,7 +419,7 @@ footer
                     top: 426px
                     width: 259px
                     height: 35px
-                    background-image: url('/images/cvig/label-two.png');
+                    background-image: url("/images/cvig/label-two.png")
 
             &#three
                 color: blue
@@ -435,7 +435,7 @@ footer
                     top: 299.2px
                     width: 127px
                     height: 35px
-                    background-image: url('/images/cvig/label-three.png');
+                    background-image: url("/images/cvig/label-three.png")
 
             &#four
                 .box
@@ -450,17 +450,17 @@ footer
                     top: 202.2px
                     width: 219px
                     height: 35px
-                    background-image: url('/images/cvig/label-four.png');
+                    background-image: url("/images/cvig/label-four.png")
 
             &:hover
                 .box
-                    transform: scale(0.8, 1)
-                    -webkit-transform: scale(0.8, 1)
+                    transform: scale(0.8 1)
+                    -webkit-transform: scale(0.8 1)
 
                 .label
                     opacity: 1
-                    transform: scale(1, 1)
-                    -webkit-transform: scale(1, 1)
+                    transform: scale(1 1)
+                    -webkit-transform: scale(1 1)
 
     .job
         opacity: 0
@@ -485,7 +485,7 @@ footer
             top: 224px
             width: 26px
             height: 590px
-            transform: scale(1, 0)
+            transform: scale(1 0)
             transform-origin: 13.25px 0px  // top-center
             background: black
 
@@ -524,7 +524,7 @@ footer
         transition: opacity 0.25s ease-in-out 0.25s
 
         .bar
-            transform: scale(1, 1)
+            transform: scale(1 1)
             transition: transform 0.25s ease-in-out 0.60s
             -webkit-transition: -webkit-transform 0.25s ease-in-out 0.60s
 
@@ -534,14 +534,14 @@ footer
 ///////////////////////
 
 @font-face
-    font-family: 'divmain'
+    font-family: "divmain"
     src: url("/fonts/divmain.eot")
-    src: url("/fonts/divmain.eot?#iefix") format('embedded-opentype'), url("/fonts/divmain.woff") format('woff'), url("/fonts/divmain.ttf") format('truetype'), url("/fonts/divmain.svg#divmain") format('svg')
+    src: url("/fonts/divmain.eot?#iefix") format("embedded-opentype"), url("/fonts/divmain.woff") format("woff"), url("/fonts/divmain.ttf") format("truetype"), url("/fonts/divmain.svg#divmain") format("svg")
     font-weight: normal
     font-style: normal
 
 .dmicon-about, .dmicon-resume, .dmicon-contact, .dmicon-work, .dmicon-printer, .dmicon-adobe, .dmicon-facebook, .dmicon-linkedin
-    font-family: 'divmain'
+    font-family: "divmain"
     speak: none
     font-style: normal
     font-weight: normal
@@ -580,14 +580,14 @@ footer
 ////////////////////////
 
 @font-face
-    font-family: 'AsapRegular'
-    src: url('/fonts/Asap-Regular-webfont.woff') format('woff'), url('/fonts/Asap-Regular-webfont.svg#AsapRegular') format('svg')
+    font-family: "AsapRegular"
+    src: url("/fonts/Asap-Regular-webfont.woff") format("woff"), url("/fonts/Asap-Regular-webfont.svg#AsapRegular") format("svg")
     font-weight: normal
     font-style: normal
 
 @font-face
-    font-family: 'AsapBold'
-    src: url('/fonts/Asap-Bold-webfont.woff') format('woff'), url('/fonts/Asap-Bold-webfont.svg#AsapBold') format('svg')
+    font-family: "AsapBold"
+    src: url("/fonts/Asap-Bold-webfont.woff") format("woff"), url("/fonts/Asap-Bold-webfont.svg#AsapBold") format("svg")
     font-weight: normal
     font-style: normal
 
@@ -597,5 +597,5 @@ footer
 ////////////////////
 
 (root)
-(root.d) @media screen and (min-width: 970px)
-(root.m) @media screen and (max-width: 970px)
+(root.d) "@media screen and (min-width: 970px)"
+(root.m) "@media screen and (max-width: 970px)"
