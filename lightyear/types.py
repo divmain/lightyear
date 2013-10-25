@@ -156,11 +156,11 @@ class CSSRule():
             return ''
 
         debug_comment = debug.line_number_comment(self.index) if debug else ''
-        return '{property}:{values};{debug}{important}'.format(
+        return '{property}:{values}{important};{debug}'.format(
             property=self.prop,
             values=' '.join(str(x) for x in self.values),
             debug=debug_comment,
-            important='!important' if self.important else '')
+            important=' !important' if self.important else '')
 
 
 class ParentReference():
