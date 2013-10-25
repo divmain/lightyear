@@ -47,7 +47,7 @@ def block_element(env, node, children):
     return children[0][0]
 
 
-@GDef(r'simple_selector = selector_with_space? (((type_sel / universal_sel) (attribute_sel / id_class_sel / pseudo_class)*) / (attribute_sel / id_class_sel))')
+@GDef(r'simple_selector = selector_with_space? (((type_sel / universal_sel) (attribute_sel / id_class_sel / pseudo_class)*) / ((attribute_sel / id_class_sel)+ pseudo_class?))')
 def simple_selector(env, node, children):
     return node.text
 
