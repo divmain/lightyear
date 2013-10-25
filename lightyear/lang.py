@@ -180,17 +180,28 @@ def mixin_decl(env, node):
     env[name] = MixIn(name=name, func=f)
 
 
-@GDef(r'mixin_or_func_call = name "(" (_? expr _?)* ")"')
+@GDef(r'mixin_or_func_call = tag? name "(" (_? expr _?)* ")"')
 def mixin_or_func_call(env, node, children):
-    name, _, args, _ = children
+    tag, name, _, args, _ = children
+    tag = tag[0] if tag else None
     args = [arg for _, arg, _ in args]
 
     if name in builtin_funcs:
-        return builtin_funcs[name](env, *args)
+        return_val = builtin_funcs[name](env, *args)
     elif name in env:
-        return UnpackMe(env[name](*args))
+        return_val = UnpackMe(env[name](*args))
+    else:
+        raise UnknownMixinOrFunc(
+            'Unknown mixin or function: {}'.format(name),
+            location=node.start)
 
-    raise UnknownMixinOrFunc(location=node.start)
+    if isinstance(return_val, UnpackMe) and tag:
+        for element in return_val:
+            if hasattr(element, tag):
+                element.tag = tag
+    return return_val
+
+
 
 
 @GDef(r'lvalue = ~"[a-zA-Z\_][a-zA-Z0-9\-\_]*"')
