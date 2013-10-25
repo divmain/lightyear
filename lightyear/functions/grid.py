@@ -13,8 +13,8 @@ def col(env, number):
     try:
         column_width = env['grid-column-width']
         gutter = env['grid-gutter']
-    except KeyError:
-        raise LyError('Grid is not configured.')
+    except KeyError as e:
+        raise LyError('Grid is not properly configured. Cannot find: {}'.format(e))
 
     width = column_width * number
     margin = gutter / Decimal(2)
@@ -58,8 +58,8 @@ def ncol(env, grid_id, number):
     try:
         total_columns = env['ngrid-{}-icolumns'.format(grid_id)]
         gutter = env['ngrid-{}-gutter'.format(grid_id)]
-    except KeyError:
-        raise LyError('Grid is not properly configured.')
+    except KeyError as e:
+        raise LyError('Grid is not properly configured. Cannot find: {}'.format(e))
 
     width = grid_width(env, grid_id) / total_columns * number
     margin = gutter / Decimal(2)
@@ -113,5 +113,5 @@ def grid_width(env, grid_id):
         num_parent_consumed = env['ngrid-{}-ocolumns'.format(grid_id)]
         return (parent_width / num_parent_columns) * num_parent_consumed - parent_gutter
 
-    except KeyError:
-        raise LyError('Grid is not properly configured.')
+    except KeyError as e:
+        raise LyError('Grid is not properly configured. Cannot find: {}'.format(e))
