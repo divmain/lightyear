@@ -140,7 +140,7 @@ class CSSRule():
 
     def css(self, tag=None, debug=False):
         '''
-        Return valid CSS for self.
+        Return valid CSS rule.
         '''
         if tag and not tag == self.tag:
             return ''
@@ -156,10 +156,13 @@ class CSSRule():
 
 class ParentReference():
     '''
-    LightYear rule blocks that start with a reference to their parent.
+    Represents a rule block that whose selector refers to its parent.
+
     Example:
     p
-        &:hover   <---   ParentReference will be used here.
+        &:hover
+
+    In this case, the child rule is synonymous with p:hover on the first level.
     '''
     def __init__(self, rule_block):
         self.rule_block = rule_block
@@ -285,7 +288,7 @@ class Distance():
 
 class Color():
     '''
-    Represents a CSS color.
+    Represents a CSS color of type RGB(A), HSL(A), hex, or named.
     '''
     def __init__(self, color, ctype):
         self.type = ctype

@@ -7,6 +7,9 @@ from ..errors import LyError
 
 @bifunc
 def col(env, number):
+    '''
+    Return declarations for a CSS column of size number.
+    '''
     try:
         column_width = env['grid-column-width']
         gutter = env['grid-gutter']
@@ -50,7 +53,7 @@ def col(env, number):
 @bifunc
 def ncol(env, grid_id, number):
     '''
-    Return CSS rules for a nested column in grid_id of size number.
+    Return CSS declarations for a nested column in grid_id of size number.
     '''
     try:
         total_columns = env['ngrid-{}-icolumns'.format(grid_id)]
