@@ -7,8 +7,9 @@ class IndentationError(LyError):
 
 
 class UnknownMixinOrFunc(LyError):
-    def __init__(self, location):
+    def __init__(self, *args, location=0):
         self.location = location
+        super().__init__(*args)
 
 
 class IncompatibleUnits(LyError):
