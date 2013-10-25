@@ -70,7 +70,7 @@ def test_pretty_at_rule():
     i = dedent('''
         body
             color: black
-        @media screen and (min-width:970px)
+        @media screen and (min-width: 970px)
             body
                 color: white
         ''')
