@@ -53,12 +53,43 @@ def ncol(env, grid_id, number):
     Return CSS rules for a nested column in grid_id of size number.
     '''
     try:
-        pass
-
+        total_columns = env['ngrid-{}-icolumns'.format(grid_id)]
+        gutter = env['ngrid-{}-gutter'.format(grid_id)]
     except KeyError:
         raise LyError('Grid is not properly configured.')
 
-    pass
+    width = grid_width(env, grid_id) / total_columns * number
+    margin = gutter / Decimal(2)
+
+    declarations = [
+        CSSRule(
+            tag=None,
+            prop='box-sizing',
+            values=['border-box'],
+            index='generated'),
+        CSSRule(
+            tag=None,
+            prop='display',
+            values=['inline-block'],
+            index='generated'),
+        CSSRule(
+            tag=None,
+            prop='width',
+            values=[width],
+            index='generated'),
+        CSSRule(
+            tag=None,
+            prop='margin-left',
+            values=[margin],
+            index='generated'),
+        CSSRule(
+            tag=None,
+            prop='margin-right',
+            values=[margin],
+            index='generated'),
+        ]
+
+    return UnpackMe(declarations)
 
 
 def grid_width(env, grid_id):
