@@ -8,9 +8,10 @@ grid-column-width = 60px
 grid-gutter = 32px
 
 // Configure nested grid
-//  - assumes space of 8 columns of parent grid.
+//  - consumes 8 columns of parent grid.
 //  - configures 3 inner columns
-//  - configured gutter of 64px for inner columns
+//  - configures gutter of 64px for inner columns
+ngrid-1-parent = 0
 ngrid-1-ocolumns = 8
 ngrid-1-icolumns = 4
 ngrid-1-gutter = 64px
