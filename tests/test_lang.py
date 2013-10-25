@@ -511,7 +511,7 @@ def test_font_face():
             font-family: Open Sans
         ''')
     o = ('@font-face{'
-         'font-family:Open Sans;src:url(fonts/OpenSans-Regular-webfont.eot);'
+         'font-family:Open Sans;src:url("fonts/OpenSans-Regular-webfont.eot");'
          'font-weight:normal;font-weight:400;font-style:normal;}'
          '.opensans{font-family:Open Sans;}')
     ly = LY()

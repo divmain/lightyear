@@ -11,7 +11,7 @@ def test_url():
         div#header
             background-image: url("images/header.jpg")
         ''')
-    o = 'div#header{background-image:url(images/header.jpg);}'
+    o = 'div#header{background-image:url("images/header.jpg");}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o

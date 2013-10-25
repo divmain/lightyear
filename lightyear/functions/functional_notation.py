@@ -10,7 +10,7 @@ from ..types import Color
 
 @bifunc
 def url(env, text):
-    return 'url({})'.format(text)
+    return 'url("{}")'.format(text)
 
 
 @bifunc
