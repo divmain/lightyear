@@ -140,7 +140,7 @@ class CanIUsePrefixes():
     def __init__(self, targets, offline):
         self.targets = [setting.split('=')
                         for setting in targets.split(';')]
-        self.agents, self.statuses, self.eras, self.data = self.get_data(offline)
+        self.data = self.get_data(offline)
 
     def get_data(self, offline):
         return self._get_data_offline() if offline else self._get_data_online()
@@ -152,7 +152,7 @@ class CanIUsePrefixes():
         with open(vendor_data_path, 'r') as jsonf:
             j = json.loads(jsonf.read())
 
-        return j['agents'], j['statuses'], j['eras'], j['data']
+        return j
 
     def _get_data_online(self):
         try:
@@ -170,7 +170,7 @@ class CanIUsePrefixes():
         text = httpf.read().decode(encoding='UTF-8')
 
         j = json.loads(text)
-        return j['agents'], j['statuses'], j['eras'], j['data']
+        return j['data']
 
     def vendorized_properties(self, proprty):
         properties = set()
