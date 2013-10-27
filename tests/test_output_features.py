@@ -194,13 +194,13 @@ def test_vendorize_offline_d():
     assert ly.css() == o
 
 
-# def test_vendorize_online():
-#     i = dedent('''
-#         body
-#             a:hover
-#                 transform: scale(2)
-#         ''')
-#     o = ('body a:hover{-webkit-transform:scale(2);transform:scale(2);}')
-#     ly = LY(vendorize='online', vendor_targets='ie=8;firefox=20;chrome=26;safari=5')
-#     ly.eval(i)
-#     assert ly.css() == o
+def test_vendorize_online():
+    i = dedent('''
+        body
+            a:hover
+                transform: scale(2)
+        ''')
+    o = ('body a:hover{-webkit-transform:scale(2);transform:scale(2);}')
+    ly = LY(vendorize='online', vendor_targets='ie=8;firefox=20;chrome=26;safari=5')
+    ly.eval(i)
+    assert ly.css() == o
