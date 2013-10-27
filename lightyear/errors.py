@@ -2,7 +2,7 @@ class LyError(Exception):
     pass
 
 
-class IndentationError(LyError):
+class IndentError(LyError):
     pass
 
 
