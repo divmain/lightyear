@@ -6,6 +6,7 @@ from parsimonious.grammar import Grammar
 from .errors import IndentError, LyError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_OPEN, COMMENT_CLOSE
 from .ly_types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
+from .vendor import vendorize_css, vendorize_tree
 
 ly_grammar = ""
 funcmap = {}
@@ -44,12 +45,14 @@ class LY(object):
     '''
     grammar = None
 
-    def __init__(self, env=None, debug=False, path=None):
+    def __init__(self, env=None, debug=False, path=None, vendorize=False, vendor_targets=None):
         if not self.grammar:
             self.__class__.grammar = Grammar(ly_grammar)['ltree']
         self.env = env or {}
         self.debug = debug
         self.path = path
+        self.vendorize = vendorize
+        self.vendor_targets = vendor_targets
 
     def eval(self, ly_code):
         '''
@@ -66,6 +69,11 @@ class LY(object):
         node = self.grammar.parse(ly_code)
         self.ltree = self._evalnode(node)
         self.flatten()
+
+        if self.vendorize == 'offline':
+            vendorize_tree(self.ltree, offline=True, targets=self.vendor_targets)
+        if self.vendorize == 'online':
+            vendorize_tree(self.ltree, offline=False, targets=self.vendor_targets)
 
     def _evalnode(self, node):
         '''
@@ -191,12 +199,18 @@ class LY(object):
             if root_block.prefix:
                 output += '}'
 
+        if self.vendorize == 'prefixr':
+            return vendorize_css(output)
+
         return output
 
     def pretty_css(self):
         '''
         Output prettified CSS.
         '''
+        if self.vendorize == 'prefixr':
+            raise LyError('Cannot prettify prefixr.com CSS.')
+
         def inside(index, chars):
             j = index
             try:

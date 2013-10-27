@@ -178,7 +178,7 @@ header
         display: inline-block
         vertical-align: middle
         transition: transform 0.25s
-        -webkit-transition: -webkit-transform 0.25s
+        // -webkit-transition: -webkit-transform 0.25s
         transition-timing-function: ease-in-out
 
 
@@ -322,13 +322,13 @@ footer
     padding: 24px
     transition: text-shadow 0.5s, transform 1s
     transition-timing-function: ease-out
-    -webkit-transition: text-shadow 0.5s, -webkit-transform 1s
+    // -webkit-transition: text-shadow 0.5s, -webkit-transform 1s
 
     &:hover
         text-shadow: 0 0 14px bcolor_aqua
         transform: scale(1.1 1.1)
         transition: text-shadow 0.5s, transform 1s
-        -webkit-transition: text-shadow 0.5s, -webkit-transform 1s
+        // -webkit-transition: text-shadow 0.5s, -webkit-transform 1s
 
     &:focus
         outline: none
@@ -362,7 +362,7 @@ footer
             background-image: url("/images/cvig/banner.svg")
 
             transition: transform 0.25s ease-in-out
-            -webkit-transition: -webkit-transform 0.25s ease-in-out
+            // -webkit-transition: -webkit-transform 0.25s ease-in-out
 
             &:hover
                 transform: scale(1.02 1.02)
@@ -379,9 +379,9 @@ footer
             .label
                 opacity: 0
                 transform: scale(0 0)
-                -webkit-transform: scale(0 0)
+                // -webkit-transform: scale(0 0)
                 transition: opacity 0.50s ease-in-out 0.20s
-                -webkit-transition: opacity 0.25s ease-in-out
+                // -webkit-transition: opacity 0.25s ease-in-out
                 z-index: 5
 
             .box
@@ -390,7 +390,7 @@ footer
                 transform: scale(1 1)
                 transform-origin: 0px 0px
                 transition: transform 0.25s ease-in-out
-                -webkit-transition: -webkit-transform 0.25s ease-in-out
+                // -webkit-transition: -webkit-transform 0.25s ease-in-out
 
             &#one
                 .box
@@ -456,12 +456,12 @@ footer
             &:hover
                 .box
                     transform: scale(0.8 1)
-                    -webkit-transform: scale(0.8 1)
+                    // -webkit-transform: scale(0.8 1)
 
                 .label
                     opacity: 1
                     transform: scale(1 1)
-                    -webkit-transform: scale(1 1)
+                    // -webkit-transform: scale(1 1)
 
     .job
         opacity: 0
@@ -527,7 +527,7 @@ footer
         .bar
             transform: scale(1 1)
             transition: transform 0.25s ease-in-out 0.60s
-            -webkit-transition: -webkit-transform 0.25s ease-in-out 0.60s
+            // -webkit-transition: -webkit-transform 0.25s ease-in-out 0.60s
 
 
 ///////////////////////

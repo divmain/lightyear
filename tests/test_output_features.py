@@ -124,3 +124,83 @@ def test_reduce_b():
     ly.eval(i)
     ly.reduce()
     assert ly.css() == o
+
+
+### VENDOR PREFIXES ###
+
+def test_vendorize_prefixr():
+    i = dedent('''
+        body
+            a:hover
+                transform: scale(2)
+        ''')
+    o = ('body a:hover {-webkit-transform: scale(2);-moz-transform: scale(2);'
+         '-o-transform: scale(2);-ms-transform: scale(2);transform: scale(2);}')
+    ly = LY(vendorize='prefixr')
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_vendorize_offline_a():
+    i = dedent('''
+        body
+            a:hover
+                transform: scale(2)
+        ''')
+    o = ('body a:hover{-webkit-transform:scale(2);transform:scale(2);}')
+    ly = LY(vendorize='offline', vendor_targets='ie=10;firefox=20;chrome=26;safari=5')
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_vendorize_offline_b():
+    i = dedent('''
+        body
+            a:hover
+                transform: scale(2)
+        ''')
+    o = ('body a:hover{-webkit-transform:scale(2);-moz-transform:scale(2);transform:scale(2);}')
+    ly = LY(vendorize='offline', vendor_targets='ie=10;firefox=10;chrome=26;safari=5')
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_vendorize_offline_c():
+    i = dedent('''
+        body
+            a:hover
+                transform: scale(2)
+        ''')
+    o = ('body a:hover{-webkit-transform:scale(2);-ms-transform:scale(2);transform:scale(2);}')
+    ly = LY(vendorize='offline', vendor_targets='ie=9;firefox=20;chrome=26;safari=5')
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_vendorize_offline_d():
+    i = dedent('''
+        body
+            transform: scale(1.1 1.1)
+            transition: transform 0.25s
+        ''')
+    o = ('body{'
+         '-webkit-transform:scale(1.1,1.1);'
+         '-ms-transform:scale(1.1,1.1);'
+         'transform:scale(1.1,1.1);'
+         '-webkit-transition:-webkit-transform 0.25s;'
+         'transition:transform 0.25s;}')
+    ly = LY(vendorize='offline', vendor_targets='ie=9;firefox=20;chrome=24;safari=5')
+    ly.eval(i)
+    assert ly.css() == o
+
+
+# def test_vendorize_online():
+#     i = dedent('''
+#         body
+#             a:hover
+#                 transform: scale(2)
+#         ''')
+#     o = ('body a:hover{-webkit-transform:scale(2);transform:scale(2);}')
+#     ly = LY(vendorize='online', vendor_targets='ie=8;firefox=20;chrome=26;safari=5')
+#     ly.eval(i)
+#     assert ly.css() == o

@@ -3,7 +3,7 @@ LightYear CSS
 Dale Bustad <dale@divmain.com>
 
 Usage:
-  lightyear [options] FILE... [--out DIR | --stdout]
+  lightyear [options] [-v | --vendorize TARGET] FILE... [--out DIR | --stdout]
   lightyear (-h | --help)
   lightyear --version
 
@@ -15,10 +15,19 @@ Options:
   --out DIR     Path to put CSS files.
   --stdout      Write results to STDOUT.
 
-  -p            Prettify CSS output.
+  -p            Prettify CSS output
   -d            Include original line numbers in outputted CSS for debugging.
   -r            Reduce and consolidate rules with identical selectors into
                 single rules.
+
+  -v                Apply vendor prefixes to CSS output via prefixr.com API.
+                    Default is offline method.
+  --vendorize       Alternate vendor prefix method.
+                    Options: online, offline, prefixr
+
+  --target TARGET   Specify browser targets for vendor prefixes.
+                    Example: ie=9;firefox=22;chrome=24;safari=5
+                    Default: ie=10;firefox=20;chrome=26;safari=5
 
   -h --help     Show this screen.
   --version     Show version.
@@ -43,6 +52,10 @@ def main(argv):
             raise OSError('File not found: {}'.format(file_group))
         files.extend(files_in_group)
 
+    vendorize = ('prefixr' if args['-v']
+                 else args['--vendorize'] if args['--vendorize']
+                 else False)
+
     for f in files:
         abspath = os.path.dirname(os.path.abspath(f))
         in_name = os.path.basename(f)
@@ -52,7 +65,8 @@ def main(argv):
             debug=args['-d'],
             prettify=args['-p'],
             reduc=args['-r'],
-            path=abspath)
+            path=abspath,
+            vendorize=vendorize)
 
         if args['--out']:
             outdir = os.path.abspath(args['--out'])
@@ -65,8 +79,8 @@ def main(argv):
     return True
 
 
-def get_css(source, debug, prettify, reduc, path):
-    ly = LY(debug=debug, path=path)
+def get_css(source, debug, prettify, reduc, path, vendorize):
+    ly = LY(debug=debug, path=path, vendorize=vendorize)
     ly.eval(source)
     if reduc:
         ly.reduce()
