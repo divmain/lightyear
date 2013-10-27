@@ -114,7 +114,7 @@ def vendorize_tree(ltree, offline=True, targets=None):
 
 
 def vendorize_block(block, prefixer):
-    # Examine nodes in reverse, to avoid seeing same node multiple times
+    # Examine nodes in reverse, to avoid checking same node multiple times
     for i, node in reversed(list(enumerate(block))):
         # Recursively process child blocks.
         if hasattr(node, 'block'):
