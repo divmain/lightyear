@@ -49,3 +49,16 @@ def test_example_file():
     ly = LY()
     ly.eval(i)
     assert ly.pretty_css() == o
+
+
+def test_example_vendorize():
+    with open('divmain.ly', 'r') as f:
+        i = f.read()
+    o = ''
+    ly = LY(vendorize='offline')
+    ly.eval(i)
+    x = ly.pretty_css()
+    with open('divmain.vendor.css', 'w') as f:
+        f.write(x)
+    assert o
+    # assert ly.pretty_css() == o
