@@ -1,7 +1,11 @@
+import os.path
 from textwrap import dedent
 
 import env
 from lightyear import LY
+
+
+TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def test_large_a():
@@ -43,22 +47,20 @@ def test_large_a():
 
 
 def test_example_file():
-    with open('divmain.ly', 'r') as f:
+    with open(os.path.join(TEST_DIR, 'divmain.ly'), 'r') as f:
         i = f.read()
-    o = ''
+    with open(os.path.join(TEST_DIR, 'divmain.css'), 'r') as f:
+        o = f.read()
     ly = LY()
     ly.eval(i)
     assert ly.pretty_css() == o
 
 
 def test_example_vendorize():
-    with open('divmain.ly', 'r') as f:
+    with open(os.path.join(TEST_DIR, 'divmain.ly'), 'r') as f:
         i = f.read()
-    o = ''
+    with open(os.path.join(TEST_DIR, 'divmain.vendor.css'), 'r') as f:
+        o = f.read()
     ly = LY(vendorize='offline')
     ly.eval(i)
-    x = ly.pretty_css()
-    with open('divmain.vendor.css', 'w') as f:
-        f.write(x)
-    assert o
-    # assert ly.pretty_css() == o
+    assert ly.pretty_css() == o
