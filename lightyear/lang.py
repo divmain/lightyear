@@ -3,8 +3,8 @@ from decimal import Decimal, getcontext
 getcontext().prec = 6
 
 from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_OPEN, COMMENT_CLOSE
-from .types import (RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock,
-                    Distance, ParentReference, Color, AtRuleBlock, Keyframe)
+from .ly_types import (RuleBlock, CSSRule, MixIn, UnpackMe, RootBlock,
+                       Distance, ParentReference, Color, AtRuleBlock, Keyframe)
 from .core import GDef
 from .functions import builtin_funcs
 from .errors import UnknownMixinOrFunc

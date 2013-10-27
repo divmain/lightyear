@@ -2,7 +2,7 @@ from decimal import Decimal
 from colorsys import hls_to_rgb, rgb_to_hls
 
 from . import bifunc
-from ..types import Color, Distance
+from ..ly_types import Color, Distance
 
 
 @bifunc

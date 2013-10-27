@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from . import bifunc
-from ..types import UnpackMe, CSSRule, RuleBlock, ParentReference
+from ..ly_types import UnpackMe, CSSRule, RuleBlock, ParentReference
 from ..errors import LyError
 
 

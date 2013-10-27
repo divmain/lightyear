@@ -3,9 +3,9 @@ from collections import OrderedDict
 
 from parsimonious.grammar import Grammar
 
-from .errors import IndentationError
+from .errors import IndentError, LyError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_OPEN, COMMENT_CLOSE
-from .types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
+from .ly_types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
 
 ly_grammar = ""
 funcmap = {}

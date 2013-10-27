@@ -3,7 +3,7 @@ Implements CSS3 functional notation.
 '''
 
 from . import bifunc
-from ..types import Color
+from ..ly_types import Color
 
 
 ### SYNTAX ###
@@ -55,8 +55,8 @@ def hsla(env, hue, saturation, lightness, alpha):
 ### CSS3 ###
 
 @bifunc
-def scale(env, x, y):
-    return 'scale({x},{y})'.format(x=x, y=y)
+def scale(env, *args):
+    return 'scale({})'.format(','.join(str(a) for a in args))
 
 
 ### FONT-FACE ###
