@@ -188,7 +188,9 @@ class CanIUsePrefixes():
         return value
 
     def requires_prefix(self, proprty, browser, version):
-        corrected = CORRECTIONS.get(proprty, proprty)
+        if not proprty in CORRECTIONS:
+            return False
+        corrected = CORRECTIONS[proprty]
         try:
             status = self.data[corrected]['stats'][browser][version]
         except KeyError:
