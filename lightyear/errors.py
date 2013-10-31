@@ -16,7 +16,11 @@ class LyError(Exception):
 
 
 class IndentError(LyError):
-    pass
+    def __init__(self, lnum):
+        self.line_no = lnum
+
+    def message(self):
+        return "Invalid indentation on line {}.".format(self.line_no+1)
 
 
 class UnknownMixinOrFunc(LyError):

@@ -299,7 +299,7 @@ def tokenize_whitespace(lines):
     firstline = True
     prevdent = 0
 
-    for line in lines:
+    for lnum, line in enumerate(lines):
         line = line.expandtabs(INDENT_SIZE)
 
         # Don't allow empty lines to effect tracking of indentation.
@@ -311,7 +311,7 @@ def tokenize_whitespace(lines):
         # Check for indentation on the first line.
         if firstline:
             if line[0] == " ":
-                raise IndentError
+                raise IndentError(lnum)
             firstline = False
 
         leading_spaces = re.match('[ ]*', line).group()
@@ -324,7 +324,7 @@ def tokenize_whitespace(lines):
         elif curdent < prevdent:
             yield BLK_CLOSE * (prevdent - curdent) + line
         else:
-            raise IndentError(line)
+            raise IndentError(lnum)
 
         prevdent = curdent
 
