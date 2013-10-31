@@ -80,6 +80,7 @@ def main(argv):
 
     except LyError as e:
         print(e)
+        print("... while processing file {}".format(f))
         return e.return_code()
 
     return 0
