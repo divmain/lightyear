@@ -40,6 +40,7 @@ from glob import glob
 from docopt import docopt
 
 from . import LY
+from .errors import LyError
 
 
 def main(argv):
@@ -56,27 +57,32 @@ def main(argv):
                  else args['--vendorize'] if args['--vendorize']
                  else False)
 
-    for f in files:
-        abspath = os.path.dirname(os.path.abspath(f))
-        in_name = os.path.basename(f)
-        out_name = '.'.join(in_name.split('.')[:-1]) + '.css'
-        css = get_css(
-            source=load(f),
-            debug=args['-d'],
-            prettify=args['-p'],
-            reduc=args['-r'],
-            path=abspath,
-            vendorize=vendorize)
+    try:
+        for f in files:
+            abspath = os.path.dirname(os.path.abspath(f))
+            in_name = os.path.basename(f)
+            out_name = '.'.join(in_name.split('.')[:-1]) + '.css'
+            css = get_css(
+                source=load(f),
+                debug=args['-d'],
+                prettify=args['-p'],
+                reduc=args['-r'],
+                path=abspath,
+                vendorize=vendorize)
 
-        if args['--out']:
-            outdir = os.path.abspath(args['--out'])
-            save(css, os.path.join(outdir, out_name))
-        else:
-            print(css)
-            if not len(files) == 1:
-                print(chr(0), end='')
+            if args['--out']:
+                outdir = os.path.abspath(args['--out'])
+                save(css, os.path.join(outdir, out_name))
+            else:
+                print(css)
+                if not len(files) == 1:
+                    print(chr(0), end='')
 
-    return True
+    except LyError as e:
+        print(e)
+        return e.return_code()
+
+    return 0
 
 
 def get_css(source, debug, prettify, reduc, path, vendorize):

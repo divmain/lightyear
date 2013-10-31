@@ -2,8 +2,9 @@ import re
 from collections import OrderedDict
 
 from parsimonious.grammar import Grammar
+from parsimonious.exceptions import IncompleteParseError
 
-from .errors import IndentError, LyError
+from .errors import IndentError, LyError, LySyntaxError
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_OPEN, COMMENT_CLOSE
 from .ly_types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
 from .vendor import vendorize_css, vendorize_tree
@@ -66,7 +67,11 @@ class LY(object):
 
         self.debug = DebugGenerator(ly_code) if self.debug else False
 
-        node = self.grammar.parse(ly_code)
+        try:
+            node = self.grammar.parse(ly_code)
+        except IncompleteParseError as e:
+            raise LySyntaxError(e.pos, ly_code)
+
         self.ltree = self._evalnode(node)
         self.flatten()
 
