@@ -53,7 +53,7 @@ def main(argv):
             raise OSError('File not found: {}'.format(file_group))
         files.extend(files_in_group)
 
-    vendorize = ('prefixr' if args['-v']
+    vendorize = ('offline' if args['-v']
                  else args['--vendorize'] if args['--vendorize']
                  else False)
 
