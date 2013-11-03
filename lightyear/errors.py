@@ -3,7 +3,7 @@ from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_OPEN, COMMENT_CLOSE
 
 class LyError(Exception):
     def message(self):
-        return "Error."
+        return "Error"
 
     def __repr__(self):
         return self.__class__.__name__ + ": " + self.message()
@@ -20,7 +20,7 @@ class IndentError(LyError):
         self.line_no = lnum
 
     def message(self):
-        return "Invalid indentation on line {}.".format(self.line_no+1)
+        return "Invalid indentation on line {}".format(self.line_no+1)
 
 
 class UnknownMixinOrFunc(LyError):
@@ -73,5 +73,5 @@ class LySyntaxError(LyError):
             self.post_context = self.text[start_line_after:end_line_after]
 
     def message(self):
-        return 'Syntax error in section starting on line {}.'.format(
+        return 'Syntax error in section starting on line {}'.format(
             self.line_no+1)

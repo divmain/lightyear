@@ -79,8 +79,7 @@ def main(argv):
                     print(chr(0), end='')
 
     except LyError as e:
-        print(e)
-        print("... while processing file {}".format(f))
+        print(e, "while processing file {}.".format(f))
         return e.return_code()
 
     return 0
