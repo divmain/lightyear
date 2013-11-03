@@ -75,10 +75,6 @@ universal_sel = "*"
 
 attribute_sel = "[" name ("=" / "~=" / "|=") name "]"
 id_class_sel = ("#" / ".") name
-
-pseudo_class = ":" ((pseudo_class_param "(" num ")") / pseudo_class_noparam)
-pseudo_class_param = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-of-type" / "lang"
-pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after" / ":-moz-focus-inner"
 ''')
 def selector_misc(env, node, children):
     return node.text
@@ -87,7 +83,28 @@ def selector_misc(env, node, children):
 @GDef(r'selector_with_space = _? (">" / "+" / "~") _?')
 def selector_with_space(env, node, children):
     'Support immediate child, immediate sibling, and general sibling selectors.'
-    return node.text.strip()
+    return node.text.strip() + " "
+
+
+@GDef(r'pseudo_class = ":" (pseudo_class_param / pseudo_class_noparam)')
+def pseudo_class(env, node, children):
+    return ":" + children[1][0]
+
+
+@GDef(r'pseudo_class_param = pseudo_class_param_name "(" expr ")"')
+def pseudo_class_param(env, node, children):
+    name, _, value, _ = children
+    return '{name}({value})'.format(name=name, value=value)
+
+
+@GDef(r'pseudo_class_param_name = "nth-child" / "nth-last-child" / "nth-of-type" / "nth-last-of-type" / "lang"')
+def pseudo_class_param_name(env, node, children):
+    return node.text
+
+
+@GDef(r'pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after" / ":-moz-focus-inner"')
+def pseudo_class_noparam_options(env, node, children):
+    return node.text
 
 
 ### PARENT REFERENCE ###

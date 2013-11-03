@@ -105,6 +105,18 @@ def test_pseudo_class_param():
     assert ly.css() == o
 
 
+def test_pseudo_class_param_expr():
+    i = dedent('''
+        i = 2
+        li:nth-child(i)
+            color: black
+        ''')
+    o = 'li:nth-child(2){color:black;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
 def test_pseudo_class_noparam():
     i = dedent('''
         a:hover
