@@ -214,7 +214,7 @@ header nav ul li {
     float: left;
     margin-right: 32px;
 }
-#contact fieldset input, textarea, select {
+#contact fieldset input, #contact fieldset textarea, #contact fieldset select {
     display: inline-block;
     width: 100%;
     padding: 14px 20px;
@@ -224,7 +224,7 @@ header nav ul li {
     border: none;
     outline: none;
 }
-#contact fieldset input, textarea, select:focus {
+#contact fieldset input, #contact fieldset textarea, #contact fieldset select:focus {
     color: #ffffff;
     background-color: #0b8f9e;
 }
@@ -274,7 +274,7 @@ footer a.email {
     color: #ffffff;
     text-decoration: none;
 }
-footer a.dmicon-facebook, a.dmicon-linkedin {
+footer a.dmicon-facebook, footer a.dmicon-linkedin {
     display: inline-block;
     vertical-align: middle;
     margin-left: 24px;
@@ -462,19 +462,19 @@ footer a.dmicon-facebook, a.dmicon-linkedin {
 #cvig .job .text b {
     font-family: AsapBold;
 }
-#cvig .job#one .title, .bar {
+#cvig .job#one .title, #cvig .job#one .bar {
     background: #585b9b;
 }
-#cvig .job#two .title, .bar {
+#cvig .job#two .title, #cvig .job#two .bar {
     background: #3b8b87;
 }
-#cvig .job#three .title, .bar {
+#cvig .job#three .title, #cvig .job#three .bar {
     background: #223b5e;
 }
 #cvig .job#three a {
     color: #223b5e;
 }
-#cvig .job#four .title, .bar {
+#cvig .job#four .title, #cvig .job#four .bar {
     background: #3e5c7c;
 }
 #cvig .cvigActive {
@@ -567,7 +567,7 @@ footer a.dmicon-facebook, a.dmicon-linkedin {
     #contact fieldset label {
         text-align: right;
     }
-    #contact fieldset input, textarea, select {
+    #contact fieldset input, #contact fieldset textarea, #contact fieldset select {
         width: 320px;
     }
     #contact fieldset button {
