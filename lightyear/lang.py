@@ -22,17 +22,13 @@ def root_element(env, node, children):
 
 ### SELECTORS ###
 
-@GDef(r'rule_block = tag? simple_selector ("," _ simple_selector)* ___ block')
+@GDef(r'rule_block = tag? complex_selector ___ block')
 def rule_block(env, node, children):
-    tag, simple_sel, more_selectors, _, block = children
+    tag, complex_selector, _, block = children
     tag = tag[0] if tag else None
 
-    selectors = [simple_sel]
-    if more_selectors:
-        selectors.extend([',{}'.format(selector) for _, _, selector in more_selectors])
-
     return RuleBlock(tag=tag,
-                     selectors=selectors,
+                     selectors=complex_selector,
                      block=block,
                      index=node.start)
 
@@ -47,9 +43,23 @@ def block_element(env, node, children):
     return children[0][0]
 
 
-@GDef(r'simple_selector = simple_selector_a / simple_selector_b')
+@GDef(r'complex_selector = simple_selector ("," _ simple_selector)*')
+def complex_selector(env, node, children):
+    simple_sel, more_selectors = children
+
+    selectors = [simple_sel]
+    if more_selectors:
+        selectors.extend(selector for _, _, selector in more_selectors)
+
+    return selectors
+
+
+@GDef(r'simple_selector = (simple_selector_a / simple_selector_b) (_ (simple_selector_a / simple_selector_b))*')
 def simple_selector(env, node, children):
-    return children[0]
+    (first_selector, ), more = children
+    if more:
+        return first_selector + ' ' + ' '.join(sel[0] for _, sel in more)
+    return first_selector
 
 
 @GDef(r'simple_selector_a = selector_with_space? (attribute_sel / id_class_sel)+ pseudo_class?')

@@ -4,7 +4,7 @@ from collections import OrderedDict
 from parsimonious.grammar import Grammar
 from parsimonious.exceptions import IncompleteParseError
 
-from .errors import IndentError, LyError, LySyntaxError
+from .errors import IndentError, LyError, LySyntaxError, UnsupportedCommaNesting
 from .globals import BLK_OPEN, BLK_CLOSE, INDENT_SIZE, COMMENT_OPEN, COMMENT_CLOSE
 from .ly_types import RuleBlock, UnpackMe, RootBlock, IgnoreMe, ParentReference
 from .vendor import vendorize_css, vendorize_tree
@@ -108,7 +108,19 @@ class LY(object):
                 for j, child_element in reversed(list(enumerate(element.block))):
                     # Move nested RuleBlock objects to ltree and modify selectors.
                     if isinstance(child_element, RuleBlock):
-                        child_element.selectors = element.selectors + child_element.selectors
+                        if len(child_element.selectors) > 1 and len(element.selectors) > 1:
+                            raise UnsupportedCommaNesting()
+
+                        elif len(child_element.selectors) > 1:
+                            child_element.selectors = [
+                                element.selectors[0] + ' ' + child_sel
+                                for child_sel in child_element.selectors]
+
+                        else:
+                            child_element.selectors = [
+                                parent_sel + ' ' + child_element.selectors[0]
+                                for parent_sel in element.selectors]
+
                         self.ltree.insert(i+1, child_element)
                         element.block[j] = IgnoreMe()
 

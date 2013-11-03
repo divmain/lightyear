@@ -25,14 +25,7 @@ class RuleBlock():
             return ''
         if self.tag and not tag == self.tag:
             return ''
-        outside = ' '.join(self.selectors)
-
-        outside_chars = list()
-        for c in outside:
-            if c == ',':
-                outside_chars.pop()
-            outside_chars.append(c)
-        outside = ''.join(outside_chars)
+        outside = ','.join(self.selectors)
 
         if self.tag:
             inside = ''.join(
