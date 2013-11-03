@@ -36,6 +36,11 @@ class IncompatibleUnits(LyError):
     pass
 
 
+class UnsupportedCommaNesting(LyError):
+    def message(self):
+        return "Nested comma-separated selectors are not supported."
+
+
 class LySyntaxError(LyError):
     def __init__(self, pos, text):
         self.clean_text(pos, text)

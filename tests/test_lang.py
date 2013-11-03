@@ -1,7 +1,10 @@
 from textwrap import dedent
 
+import pytest
+
 import env
 from lightyear import LY
+from lightyear.errors import UnsupportedCommaNesting
 
 
 # SELECTORS
@@ -172,6 +175,54 @@ def test_parent_selector_c():
                     background-color: yellow
         ''')
     o = 'p a:hover{background-color:yellow;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_parent_selector_comma_a():
+    i = dedent('''
+        p, h1
+            span a
+                color: #ffffff
+        ''')
+    o = 'p span a,h1 span a{color:#ffffff;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_parent_selector_comma_b():
+    i = dedent('''
+        p
+            span, div
+                color: #ffffff
+        ''')
+    o = 'p span,p div{color:#ffffff;}'
+    ly = LY()
+    ly.eval(i)
+    assert ly.css() == o
+
+
+def test_parent_selector_comma_c():
+    i = dedent('''
+        p, div
+            span, div
+                color: #ffffff
+        ''')
+    ly = LY()
+    with pytest.raises(UnsupportedCommaNesting):
+        ly.eval(i)
+
+
+def test_parent_selector_comma_d():
+    i = dedent('''
+        #contact
+            div
+                a, p, i
+                    color: #ffffff
+        ''')
+    o = '#contact div a,#contact div p,#contact div i{color:#ffffff;}'
     ly = LY()
     ly.eval(i)
     assert ly.css() == o
