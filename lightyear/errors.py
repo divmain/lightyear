@@ -2,8 +2,11 @@ from .globals import BLK_OPEN, BLK_CLOSE, COMMENT_OPEN, COMMENT_CLOSE
 
 
 class LyError(Exception):
+    def __init__(self, text=None):
+        self.error_text = text or "Error"
+
     def message(self):
-        return "Error"
+        return self.error_text
 
     def __repr__(self):
         return self.__class__.__name__ + ": " + self.message()
