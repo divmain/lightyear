@@ -214,7 +214,7 @@ class LY(object):
         Output prettified CSS.
         '''
         if self.vendorize == 'prefixr':
-            raise LyError('Cannot prettify prefixr.com CSS.')
+            raise LyError('Unable to prettify prefixr.com CSS')
 
         def inside(index, chars):
             j = index
