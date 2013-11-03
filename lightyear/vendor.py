@@ -69,7 +69,6 @@ CORRECTIONS = {
 ### PREFIXR.COM METHOD ###
 
 def vendorize_css(css):
-    print('yoyoyoyo!!!!')
     return _prefixr(css)
 
 
