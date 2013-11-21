@@ -112,7 +112,7 @@ def pseudo_class_param_name(env, node, children):
     return node.text
 
 
-@GDef(r'pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after" / ":-moz-focus-inner"')
+@GDef(r'pseudo_class_noparam = "last-child" / "first-of-type" / "last-of-type" / "only-child" / "only-of-type" / "root" / "empty" / "target" / "enabled" / "disabled" / "checked" / "link" / "visited" / "hover" / "active" / "focus" / "first-letter" / "first-line" / "first-child" / "before" / "after" / ":-moz-focus-inner" / "valid" / "invalid" / "in-range" / "out-of-range" / "required" / "optional" / "read-only" / "read-write"')
 def pseudo_class_noparam_options(env, node, children):
     return node.text
 
