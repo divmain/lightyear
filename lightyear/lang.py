@@ -83,7 +83,7 @@ def simple_selector_b(env, node, children):
 type_sel = name
 universal_sel = "*"
 
-attribute_sel = "[" name ("=" / "~=" / "|=") name "]"
+attribute_sel = "[" name ("=" / "~=" / "|=" / "*=") (name / string_val) "]"
 id_class_sel = ("#" / ".") name
 ''')
 def selector_misc(env, node, children):
